@@ -1,0 +1,25 @@
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+    --bg-color: #141414;
+    --theme-color: #0040FF;
+    --text-color: white;
+    --font-familly: 'Satoshi Variable', sans-serif;
+}
+
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    font-weight: normal;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg-color);
+    font-family: var(--font-familly), serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

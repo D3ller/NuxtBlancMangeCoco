@@ -1,9 +1,20 @@
 /* color palette from <https://github.com/vuejs/theme> */
+
+@font-face {
+    font-family: 'Satoshi-Variable';
+    src: url('../fonts/Satoshi-Variable.woff2') format('woff2'),
+    url('../fonts/Satoshi-Variable.woff') format('woff'),
+    url('../fonts/Satoshi-Variable.ttf') format('truetype');
+    font-weight: 300 900;
+    font-display: swap;
+    font-style: normal;
+}
+
 :root {
     --bg-color: #141414;
     --theme-color: #0040FF;
     --text-color: white;
-    --font-familly: 'Satoshi Variable', sans-serif;
+    --font-familly: 'Satoshi-Variable';
 }
 
 

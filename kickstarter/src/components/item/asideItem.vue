@@ -6,7 +6,7 @@ const props = withDefaults(defineProps<{ title: string; active: boolean }>(), {
 </script>
 
 <template>
-<div class="aside-item">
+<div class="aside-item" :class="{active}">
   {{props.title}}
   {{active}}
 </div>
@@ -14,7 +14,14 @@ const props = withDefaults(defineProps<{ title: string; active: boolean }>(), {
 
 <style scoped>
 .aside-item {
-  padding: 10px;
+  padding: 15px 10px;
   color: var(--gray-color);
+  transition: color 0.3s, border-left-color 0.1s;
+  border-left: 4px solid var(--bg-color);
+}
+
+.aside-item.active {
+  color: white !important;
+  border-color: var(--theme-color);
 }
 </style>

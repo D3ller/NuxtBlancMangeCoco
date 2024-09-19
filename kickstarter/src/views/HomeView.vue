@@ -2,5 +2,5 @@
 </script>
 
 <template>
-test
+
 </template>

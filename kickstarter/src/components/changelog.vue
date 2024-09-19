@@ -27,6 +27,7 @@ let scrollInside = (e) => {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 20px;
+  margin-top: 80px;
 }
 
 .aside-grid-item {
@@ -39,9 +40,23 @@ let scrollInside = (e) => {
 
 .aside-content {
   padding: 20px;
-  color: var(--gray-color);
+  color: white;
   overflow-y: scroll;
+  height: 100vh;
 }
+
+.aside-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.aside-content::-webkit-scrollbar-thumb {
+  background-color: var(--gray-color);
+}
+
+.aside-content::-webkit-scrollbar-track {
+  background-color: var(--bg-secondary);
+}
+
 
 .aside-content h2 {
   font-size: 32px;

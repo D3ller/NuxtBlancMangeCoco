@@ -23,14 +23,6 @@
 </template>
 
 <style scoped>
-* {
-    padding: 0;
-}
-
-div {
-    max-width: 1113px;
-    margin: 0 auto;
-}
 
 h2 {
     font-weight: bold;

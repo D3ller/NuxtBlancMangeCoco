@@ -16,12 +16,14 @@ const props = withDefaults(defineProps<{ title: string; active: boolean }>(), {
 .aside-item {
   padding: 15px 10px;
   color: var(--gray-color);
-  transition: color 0.3s, border-left-color 0.1s;
+  transition: color 0.3s, border-left-color 0.1s, font-weight 0.1s;
   border-left: 4px solid var(--bg-color);
+  cursor: pointer;
 }
 
 .aside-item.active {
   color: white !important;
   border-color: var(--theme-color);
+  font-weight: 600;
 }
 </style>

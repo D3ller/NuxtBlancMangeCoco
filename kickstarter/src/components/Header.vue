@@ -23,6 +23,7 @@ header {
     max-height: 70vh;
     position: relative;
     color: white;
+  margin-bottom: 60px;
 }
 
 .header_content-wrapper {

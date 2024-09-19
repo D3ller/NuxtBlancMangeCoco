@@ -11,12 +11,18 @@
 }
 
 :root {
-    --bg-color: #141414;
+    --bg-color: #ffffff;
     --theme-color: #0040FF;
     --text-color: white;
     --font-familly: 'Satoshi-Variable';
+    --bg-secondary: #262626;
+    --gray-color: #cacaca;
 }
 
+main {
+    max-width: 1340px;
+    margin: 0 auto;
+}
 
 *,
 *::before,

@@ -4,6 +4,7 @@ import Avance from "@/components/avance.vue";
 import Changelog from "@/components/changelog.vue";
 import Team from "@/components/Team.vue";
 import Header from "@/components/Header.vue";
+import HeaderLinks from "@/components/HeaderLinks.vue";
 </script>
 
 <template>
@@ -14,6 +15,8 @@ import Header from "@/components/Header.vue";
     <avance></avance>
 
     <team></team>
+
+    <HeaderLinks></HeaderLinks>
 
     <changelog>
       <h2 class="title" id="description">Description du projet</h2>

@@ -1,6 +1,6 @@
-import {getUserByEmail} from "~/server/routes/models/user";
 import {verify} from "~/server/routes/utils/password";
 import {serialize, sign} from "~/server/utils/cookie";
+import {getUserByEmail} from "~/server/models/user";
 
 export default defineEventHandler(async (event) => {
 

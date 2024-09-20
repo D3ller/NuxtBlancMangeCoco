@@ -1,5 +1,4 @@
-<script setup lang="ts">
-
+<script setup>
 import Avance from "@/components/avance.vue";
 import Changelog from "@/components/changelog.vue";
 import Team from "@/components/Team.vue";

@@ -1,10 +1,13 @@
 import {getUserByEmail} from "~/server/routes/models/user";
 import {verify} from "~/server/routes/utils/password";
+import {serialize, sign} from "~/server/utils/cookie";
 
 export default defineEventHandler(async (event) => {
-    const {email, password} = await readBody(event);
 
-    if(!email || !password) {
+    const {email, password} = await readBody(event);
+    const config = useRuntimeConfig();
+
+    if (!email || !password) {
         throw createError({
             message: "Email and password are required",
             status: 400
@@ -12,7 +15,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const user = await getUserByEmail(email);
-    if(!user) {
+    if (!user) {
         throw createError({
             message: "User not found",
             status: 404
@@ -20,11 +23,30 @@ export default defineEventHandler(async (event) => {
     }
 
     const passwordMath = await verify(user.password, password);
-    if(!passwordMath) {
+    if (!passwordMath) {
         throw createError({
             message: "Password is incorrect",
             status: 400
         })
+    }
+
+    const token = serialize({userId: user.id});
+    const tokenSession = sign(token, config.cookieSecret);
+
+    setCookie(event, config.cookieName, tokenSession, {
+        httpOnly: true,
+        path: "/",
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        expires: rememberMe
+            ? new Date(Date.now() + parseInt(config.cookieRememberMeExpires))
+            : new Date(Date.now() + parseInt(config.cookieExpires)),
+    });
+
+    const {password: _password, ...userWithoutPassword} = userWithPassword;
+
+    return {
+        user: userWithoutPassword
     }
 
 })

@@ -11,7 +11,7 @@
 }
 
 :root {
-    --bg-color: #ffffff;
+    --bg-color: #141414;
     --theme-color: #0040FF;
     --text-color: white;
     --font-familly: 'Satoshi-Variable';
@@ -19,7 +19,7 @@
     --gray-color: #cacaca;
 }
 
-main {
+.container {
     max-width: 1340px;
     margin: 0 auto;
 }
@@ -39,4 +39,16 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.title {
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.subtitle {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

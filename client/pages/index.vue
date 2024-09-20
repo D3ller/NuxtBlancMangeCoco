@@ -3,7 +3,7 @@
 </script>
 
 <template>
-sss
+  sssss
 </template>
 
 <style scoped>

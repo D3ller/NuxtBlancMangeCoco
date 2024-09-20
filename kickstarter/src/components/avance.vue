@@ -10,13 +10,18 @@ let progress = ref(40)
     <div class="avance-grid">
       <div class="avance-item first">
         <div class="avance-text-container bigger"><p class="avance-text">Avancée</p>
-          <p class="avance-text">{{ progress }}%</p></div>
+          <p class="avance-text">{{ progress }}%</p>
+        </div>
         <Progressbar :progress="progress"></Progressbar>
       </div>
-      <div class="avance-item"><p class="avance-text">Lorem ipsum dolor sit amet consectetur. Sed viverra ac enim ac
-        posuere nibh. Sit consectetur nec mattis urna
-        nulla non aenean laoreet. Dignissim lacus est sit leo sed dictumst maecenas adipiscing adipiscing. Aenean donec
-        cras netus ac mattis id ipsum sapien libero.</p></div>
+      <div class="avance-item">
+        <p class="avance-text">
+          Lorem ipsum dolor sit amet consectetur. Sed viverra ac enim ac
+          posuere nibh. Sit consectetur nec mattis urna
+          nulla non aenean laoreet. Dignissim lacus est sit leo sed dictumst maecenas adipiscing adipiscing. Aenean donec
+          cras netus ac mattis id ipsum sapien libero.
+        </p>
+      </div>
     </div>
   </section>
 </template>
@@ -25,8 +30,8 @@ let progress = ref(40)
 .avance-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 40px;
-  margin-bottom: 40px;
+  gap: 100px;
+  margin: 100px 0;
 }
 
 .avance-item {
@@ -45,11 +50,11 @@ let progress = ref(40)
 }
 
 .avance-text {
-  font-size: 18px;
+  font-size: 20px;
   color: var(--gray-color);
 }
 
 .bigger {
-  font-size: 20px;
+  font-size: 26px;
 }
 </style>

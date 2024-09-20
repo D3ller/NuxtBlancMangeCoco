@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="section">
         <h2>Notre équipe</h2>
         <ul>
             <li>
@@ -24,17 +24,20 @@
 
 <style scoped>
 
+.section {
+    padding-bottom: 75px;
+}
+
 h2 {
     font-weight: bold;
     font-size: 40px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     color: var(--text-color);
 }
 
 h3 {
     margin-top: 20px;
     color: var(--text-color);
-
 }
 
 h3,span {
@@ -44,7 +47,6 @@ h3,span {
 
 ul {
     display: flex;
-    width: 100%;
     justify-content: space-between;
     margin: 0 10px;
 }

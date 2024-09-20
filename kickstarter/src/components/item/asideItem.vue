@@ -8,7 +8,6 @@ const props = withDefaults(defineProps<{ title: string; active: boolean }>(), {
 <template>
 <div class="aside-item" :class="{active}">
   {{props.title}}
-  {{active}}
 </div>
 </template>
 
@@ -25,5 +24,6 @@ const props = withDefaults(defineProps<{ title: string; active: boolean }>(), {
   color: white !important;
   border-color: var(--theme-color);
   font-weight: 600;
+  font-size: 20px;
 }
 </style>

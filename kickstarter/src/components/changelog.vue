@@ -43,6 +43,11 @@ let scrollInside = (e) => {
   color: white;
   overflow-y: scroll;
   height: 100vh;
+  font-size: 20px;
+}
+
+.title {
+  font-size: 40px;
 }
 
 .aside-content::-webkit-scrollbar {

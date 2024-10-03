@@ -56,6 +56,8 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
       <h2 class="title" id="etat">Etat de l'art du domaine</h2>
 
       <h2 class="title" id="avance">Avancée du projet</h2>
+      Semaine 2:
+      Nous avons donc décidé de commencer par définir le design de notre site, notamment le logo et les différentes couleurs que nous allions utiliser. Ensuite, nous avons commencé à créer une maquette des différentes pages que nous avions imaginées, telles que la page d'accueil, la barre de navigation, le pied de page, ainsi que la version mobile. Pendant ce temps, Corentin et Emilien ont commencé à faire des tests avec Socket.io et à explorer comment adapter notre jeu pour les téléphones. Nous avons aussi commencer à organiser comment allions mettre nos données.
     </changelog>
   </div>
 </template>

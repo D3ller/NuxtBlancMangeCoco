@@ -41,6 +41,8 @@ router.push('/salle/'+message)
   <Button @click="createRoom()">Crée une room</Button>
   <Button @click="joinRoom()">Join room</Button>
   <Button v-if="created" @click="launchParty">Lancer la partie</Button>
+=======
+  ssssssss
 </template>
 
 <style scoped>

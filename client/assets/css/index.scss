@@ -1,0 +1,10 @@
+@import "reset";
+@import "variable";
+@import "functions";
+@import "mixins";
+@import "components";
+
+body {
+  font-family: $theme-font;
+  background: red;
+}

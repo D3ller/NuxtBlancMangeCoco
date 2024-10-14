@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/fonts": "^0.8.0",
     "@nuxt/image": "^1.8.0",
+    "@pinia/nuxt": "^0.5.5",
     "@prisma/client": "5.19.1",
     "nuxt": "^3.13.0",
     "prisma": "^5.19.1",

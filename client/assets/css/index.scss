@@ -6,5 +6,55 @@
 
 body {
   font-family: $theme-font;
-  background: red;
+  background: $bg-color;
+
+  .noise {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    .hB {
+      &-title {
+        font-size: rem(60);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: white;
+      }
+
+      &-gradient {
+      }
+
+      &-description {
+        color: $text-description;
+        font-size: rem(16);
+      }
+    }
+  }
+
+}
+
+.grid {
+  @include grid;
+}
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+
+  @include mq(sm) {
+    max-width: $col-sm;
+  }
+
+  @include mq(md) {
+    max-width: $col-md;
+  }
+
+  @include mq(lg) {
+    max-width: $col-lg;
+  }
+
+  @include mq(xl) {
+    max-width: $col-xl;
+  }
 }

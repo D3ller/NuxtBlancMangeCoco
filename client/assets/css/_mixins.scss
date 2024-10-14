@@ -108,3 +108,30 @@
 
   }
 }
+
+@mixin mq($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: #{map-get($breakpoints, $breakpoint)}) {
+      @content;
+    }
+  }
+}
+
+@mixin col($size) {
+  width: calc(100% / #{$grid-columns} * #{$size} - #{$gutter} / #{$grid-columns});
+  padding-left: $gutter / 2;
+  padding-right: $gutter / 2;
+}
+
+@mixin grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -($gutter / 2);
+  margin-right: -($gutter / 2);
+
+  @for $i from 1 through $grid-columns {
+    .col-#{$i} {
+      @include col($i);
+    }
+  }
+}

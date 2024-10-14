@@ -6,12 +6,34 @@
 
 body {
   font-family: $theme-font;
-  background: red;
+  background: $bg-color;
 
   .noise {
     height: 100vh;
+    display: flex;
+    align-items: center;
+    .hB {
+      &-title {
+        font-size: rem(60);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: white;
+      }
+
+      &-gradient {
+      }
+
+      &-description {
+        color: $text-description;
+        font-size: rem(16);
+      }
+    }
   }
 
+}
+
+.grid {
+  @include grid;
 }
 
 .container {

@@ -50,10 +50,69 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
         Ce jeu est conçu pour apporter une touche de modernité à vos soirées tout en vous offrant des moments de détente et de rire. Avec Banana Split, préparez-vous à vivre une expérience aussi interactive qu’inoubliable !
 
       <h2 class="title" id="note">Note de cadrage</h2>
+      Définition du projet: <br>
+      Ce projet à pour but de réaliser un jeu de cartes avec le même principe que les jeux de société à l’humour décalé.
+      Origine du projet / Contexte
+      Une entreprise spécialisée dans les jeux de société souhaite étendre son offre en développant une version numérique de l'un de ses jeux populaires.
+      <br>
+      <br>
+      Objectifs du projet:<br>
+      -Occuper les étudiants n’ayant pas cours<br>
+      -Les utilisateurs doivent pouvoir créer un compte via Google/Discord et / ou leur adresse mail<br>
+      -Les utilisateurs peuvent supprimer leurs compte si nécessaires<br>
+      -Les utilisateurs doivent pouvoir créer des salles ou rejoindre des salons de jeu<br>
+      -Les utilisateurs doivent pouvoir créer des cartes personnalisées<br>
+      -Voter pour le thème des cartes (objectif bonus)
+      <br> <br>
+      Livrables:<br>
+      -Maquette<br>
+      - Charte Graphique<br>
+      -Site fonctionnel<br>
+      -Page « kickstarter »
+      <br> <br>
+      Périmètre du projet:
+      Le projet sera un site web accessible via un QR code présent sur les télévisions, il faudra être au minimum 3 joueurs pour pouvoir lancer une partie et au maximum être 8 pour jouer.
+      <br><br>
+      Contraintes:<br>
+      -Jeu multi-joueurs
+      <br> <br>
+      Acteurs:
+      Richard Quin
+      Corentin Nelhomme
+      Émilien Rozier
+      Axel Tribondeau
+      <br> <br>
+      Macro-Planning:<br>
+      -	Début du projet : 11 Septembre 2024<br>
+      -	Fin du projet : à déterminé<br>
+      <br>
+      -	Étapes clés :
+      o	Définition des besoins fonctionnels
+      o	Création du site présentant le jeu
+      o	Architecture du développement back (CRUD/BDD)
+      o	Charte graphique
+      o	Maquettes desktops & mobile
+      <br> <br>
+      Ressources:<br>
+      •	Nuxt<br>
+      •	Socket.io<br>
+      •	Prisma<br>
+      •	NoSQL
+      <br><br>
+      Communication
+      Nous ferons un rapport sur l’avancement du projet une fois par semaine ou une fois toutes les deux semaines au commanditaire.
+      Risques
+      Les risques possibles sont le manque de temps pour finaliser ( si trop d’ambition) et les difficultés techniques (Nuxt, Prisma).
 
       <h2 class="title" id="planning">Planning</h2>
 
       <h2 class="title" id="etat">Etat de l'art du domaine</h2>
+
+      Pour le moment, nous savons que pour ce type nous avons besoin de deux types de cartes, les « cartes phrases à trous » et les cartes « bout de phrases », ces dernières permettent de compléter les cartes phrases à trous.
+      Les règles de ce genre de jeux sont simples à comprendre, chaque joueur reçoit un certain nombre de cartes (11 pour blanc manger coco, 10 pour son homonyme anglais « Cards Against Humanity » ). Dans chacun de ces jeux, un Game Master ou Question Master est désigné au hasard pour le premier tour, ce dernier lira une carte « phrase à compléter » au hasard dans la pile de cartes de phrases à compléter et tout les joueurs sauf le Question Master devront choisir une de leur carte pour compléter la phrase lue par le Question Master. Lorsque tous les joueurs ont choisi leurs cartes, le Question Master doit alors relire la phrase à compléter avec chaque réponse des joueurs. Suite à ça le Question Master choisit alors la carte qui l’a fait le plus rire et si c’est la vôtre vous devenez alors Question pour le deuxième tour de jeu, avant chaque nouvelle carte « phrase à compléter » tous les joueurs doivent piocher une carte « but de phrases pour rester constamment à 11 ou 10 cartes.
+      Le premier joueur à 5 points gagne la partie. (il est possible d’augmenter le nombre de points à avoir pour gagner la partie.)
+
+      Pour Banana Split, nous allons partir sur des règles similaires à Blanc Manger Coco, un Question Master est choisi de façon aléatoire et il pourra donner son rôle lorsqu’il aura voté pour sa carte préférée.
 
       <h2 class="title" id="avance">Avancée du projet</h2>
       Semaine 2:

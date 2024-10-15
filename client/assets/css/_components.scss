@@ -7,3 +7,11 @@
 .game-cards {
   @include gameCard;
 }
+
+.about_card {
+  @include aboutCard;
+}
+
+.faq-item {
+  @include faqCard;
+}

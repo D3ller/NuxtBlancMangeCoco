@@ -1,8 +1,13 @@
 <script setup>
 
+import {io} from 'socket.io-client'
+import HeaderBanner from "~/components/global/section/headerBanner.vue";
+import Piment from "~/components/global/section/piment.vue";
+import FAQ from "~/components/global/section/FAQ.vue";
+
 import Button from "~/components/global/button.vue";
 import GameCard from "~/components/global/card/gameCard.vue";
-import { io } from 'socket.io-client'
+
 const router =useRouter()
 
 const socket = io({
@@ -28,21 +33,28 @@ router.push('/salle/'+message)
 </script>
 
 <template>
-  <div>
-    <Button >Se connecter</Button>
-    <Button variant="link">Se connecter</Button>
-    <Button variant="light">Se connecter</Button>
-    <Button variant="dark">Se connecter</Button>
+
+  <div id="page_home">
+    <header-banner></header-banner>
+    <piment></piment>
+    <f-a-q></f-a-q>
+
   </div>
+  <!--  <div>-->
+  <!--    <Button >Se connecter</Button>-->
+  <!--    <Button variant="link">Se connecter</Button>-->
+  <!--    <Button variant="light">Se connecter</Button>-->
+  <!--    <Button variant="dark">Se connecter</Button>-->
+  <!--  </div>-->
 
-  <game-card text="j'ai des margiela a mes  pieds toi t'en a pas lalalilalair" variant=""></game-card>
+  <!--  <game-card text="j'ai des margiela a mes  pieds toi t'en a pas lalalilalair" variant=""></game-card>-->
 
-  <input v-model="text">
-  <Button @click="createRoom()">Crée une room</Button>
-  <Button @click="joinRoom()">Join room</Button>
-  <Button v-if="created" @click="launchParty">Lancer la partie</Button>
-=======
-  ssssssss
+  <!--  <input v-model="text">-->
+  <!--  <Button @click="createRoom()">Crée une room</Button>-->
+  <!--  <Button @click="joinRoom()">Join room</Button>-->
+  <!--  <Button v-if="created" @click="launchParty">Lancer la partie</Button>-->
+  <!--  </div>-->
+
 </template>
 
 <style scoped>

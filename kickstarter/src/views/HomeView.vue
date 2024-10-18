@@ -115,8 +115,12 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
       Pour Banana Split, nous allons partir sur des règles similaires à Blanc Manger Coco, un Question Master est choisi de façon aléatoire et il pourra donner son rôle lorsqu’il aura voté pour sa carte préférée.
 
       <h2 class="title" id="avance">Avancée du projet</h2>
-      Semaine 2:
+      Semaine 1: <br>
       Nous avons donc décidé de commencer par définir le design de notre site, notamment le logo et les différentes couleurs que nous allions utiliser. Ensuite, nous avons commencé à créer une maquette des différentes pages que nous avions imaginées, telles que la page d'accueil, la barre de navigation, le pied de page, ainsi que la version mobile. Pendant ce temps, Corentin et Emilien ont commencé à faire des tests avec Socket.io et à explorer comment adapter notre jeu pour les téléphones. Nous avons aussi commencer à organiser comment allions mettre nos données.
+      <br> <br>
+      Semaine 2:<br>
+      Cette semaine, nous avons réparti les tâches comme suit : Corentin s'est occupé de la création et de la configuration de différentes  pages, tandis qu'Émilien a pris en charge la configuration de Socket.io et des requêtes associées. Axel a travaillé sur l'alimentation de notre base de données à l'aide du jeu, ainsi que sur la création de questions. Quant à Richard, il s'est chargé de la création des formulaires de connexion et d'inscription, ainsi que de la mise à jour du projet Kickstarter.
+
     </changelog>
   </div>
 </template>

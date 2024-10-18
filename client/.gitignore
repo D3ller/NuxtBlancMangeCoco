@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Css files
+assets/css/*.css
+assets/css/*.css.map

@@ -5,6 +5,9 @@ import HeaderBanner from "~/components/global/section/headerBanner.vue";
 import Piment from "~/components/global/section/piment.vue";
 import FAQ from "~/components/global/section/FAQ.vue";
 
+import Button from "~/components/global/button.vue";
+import GameCard from "~/components/global/card/gameCard.vue";
+
 const router =useRouter()
 
 const socket = io({

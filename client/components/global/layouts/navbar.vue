@@ -12,8 +12,8 @@
 
 
       <div class="navbar-button">
-        <Button variant="link">S'inscrire</Button>
-        <Button>Se connecter</Button>
+        <Button href="/register" variant="link">S'inscrire</Button>
+        <Button href="/login">Se connecter</Button>
       </div>
     </div>
   </div>

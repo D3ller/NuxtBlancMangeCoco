@@ -1,4 +1,4 @@
-import {verify} from "~/server/routes/utils/password";
+import {verify} from "~/server/utils/password";
 import {serialize, sign} from "~/server/utils/cookie";
 import {getUserByEmail} from "~/server/models/user";
 

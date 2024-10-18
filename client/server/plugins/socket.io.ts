@@ -32,31 +32,36 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
         
         socket.username = "user"
 
-        socket.emit('id', socket.id)    
-    
+        socket.emit('id', socket.id)
 
-    socket.on('create-server', (roomName, cb) => {
-        if (!rooms.find((e) => e.roomName === roomName)) {
-            rooms.push({
-                id: "1",
-                roomName,
-                players: [{id: socket.id, username: socket.username}],
-            })
-            
-            socket.join(roomName)
 
-            cb({
-                status: "room created",
-                data: {
-                    rooms,
-                    me: socket.id,
-                    players: rooms.find((e) => e.roomName == roomName)?.players
-                }
-            })
-        } else {
-            socket.emit('error', "This room already exist \n join them")
-        }
-    })
+        socket.on('create-server', (roomName, cb) => {
+            const roomExists = rooms.find((e) => e.roomName === roomName);
+            if (!roomExists) {
+                const newRoom = {
+                    id: "1",
+                    roomName,
+                    players: [{ id: socket.id, username: socket.username }],
+                };
+                rooms.push(newRoom);
+
+                socket.join(roomName);
+                cb({
+                    status: "room created",
+                    data: {
+                        rooms,
+                        me: socket.id,
+                        players: newRoom.players, // Utilisez la room nouvellement créée
+                    },
+                });
+            } else {
+                cb({
+                    status: "error",
+                    message: "This room already exists, join them instead.",
+                });
+            }
+        });
+
 
     socket.on('join-server', (roomName, cb) => {
 

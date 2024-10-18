@@ -7,7 +7,6 @@ import FAQ from "~/components/global/section/FAQ.vue";
 
 import Button from "~/components/global/button.vue";
 import GameCard from "~/components/global/card/gameCard.vue";
-import { io } from 'socket.io-client'
 const router = useRouter()
 
 const socket = io({
@@ -19,13 +18,17 @@ let text = ref('')
 // let created = ref(false)
 
 function createRoom(roomName) {
-  socket.emit('create-server', roomName, (e) => {
-    if(e.status == "room created") {
-      console.log(e.data)
-      router.push(`/room/${roomName}`)
+  socket.emit('create-server', roomName, (response) => {
+    console.log(response);
+    if (response.status === "room created") {
+      console.log(response.data);
+      router.push(`/room/${roomName}`);
+    } else if (response.status === "error") {
+      console.error(response.message); // Afficher l'erreur côté client
     }
-  })
+  });
 }
+
 
 function joinRoom(roomName) {
   socket.emit('join-server', roomName, (e) => {
@@ -41,6 +44,7 @@ function joinRoom(roomName) {
 socket.on('error', (err) => {
   alert(err)
 })
+
 </script>
 
 <template>

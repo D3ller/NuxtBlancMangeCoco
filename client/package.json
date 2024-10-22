@@ -15,6 +15,7 @@
     "@pinia/nuxt": "^0.5.5",
     "@prisma/client": "5.19.1",
     "nuxt": "^3.13.0",
+    "oslo": "^1.2.1",
     "prisma": "^5.19.1",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",

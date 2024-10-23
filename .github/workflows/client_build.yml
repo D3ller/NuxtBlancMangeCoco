@@ -15,7 +15,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./kickstarter
+        working-directory: kickstarter/
 
     steps:
       - uses: actions/checkout@v4

@@ -4,8 +4,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/index.css'],
   runtimeConfig: {
-    cookieName: '',
-    cookieSecret: ''
+    cookieName: "session",
+    cookieSecret: "secret",
+    cookieExpires: 86400,
+    cookieRememberMeExpires: 604800
   },
   pinia: {
     storeDirs: ['./stores/**']

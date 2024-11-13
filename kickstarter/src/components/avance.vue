@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Progressbar from "@/components/item/progressbar.vue";
+import Progressbar  from "../components/item/progressbar.vue";
 import {ref} from 'vue'
 
-let progress = ref(15)
+let progress = ref(33)
 </script>
 
 <template>
@@ -16,10 +16,8 @@ let progress = ref(15)
       </div>
       <div class="avance-item">
         <p class="avance-text">
-          Lorem ipsum dolor sit amet consectetur. Sed viverra ac enim ac
-          posuere nibh. Sit consectetur nec mattis urna
-          nulla non aenean laoreet. Dignissim lacus est sit leo sed dictumst maecenas adipiscing adipiscing. Aenean donec
-          cras netus ac mattis id ipsum sapien libero.
+          Banana Split est un jeu de carte multijoueur en ligne. Le jeu s'inspire de Blanc Manger Coco et de Cards Against Humanity. Le but est de créer des combinaisons de cartes pour faire rire les autres joueurs. <br>
+          Le joueur qui a le plus de points à la fin de la partie gagne.
         </p>
       </div>
     </div>

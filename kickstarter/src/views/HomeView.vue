@@ -105,6 +105,21 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
       Les risques possibles sont le manque de temps pour finaliser ( si trop d’ambition) et les difficultés techniques (Nuxt, Prisma).
 
       <h2 class="title" id="planning">Planning</h2>
+      <h3>Conception  (Septembre):</h3> 
+        <br>
+        <p>Phase dans laquelle nous avons trouvé l'idée du jeu, définis les règles de jeu et le design de ce dernier et que nous avons définis les tâches et rôles de chacun.</p>
+        <br>
+        <h3>Landing Page (Septembre-Octobre)</h3>
+        <br>
+        <p>Design et prototypage de la landing page qui va être utiliser pour lancer le jeu depuis une télévision et un QR code.</p>
+        <br>
+        <h3>Développement du jeu  (Octobre-à déterminé)</h3>
+        <br>
+        <p>Création du jeu en lui-même, avec les différentes fonctionnalités que nous avons définis dans la note de cadrage.</p>
+        <br>
+        <h3>Tests et corrections (à déterminé)</h3>
+        <br>
+        <h3>Déploiement du jeu (à déterminé)</h3>
 
       <h2 class="title" id="etat">Etat de l'art du domaine</h2>
 
@@ -120,7 +135,9 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
       <br> <br>
       Semaine 2:<br>
       Cette semaine, nous avons réparti les tâches comme suit : Corentin s'est occupé de la création et de la configuration de différentes  pages, tandis qu'Émilien a pris en charge la configuration de Socket.io et des requêtes associées. Axel a travaillé sur l'alimentation de notre base de données à l'aide du jeu, ainsi que sur la création de questions. Quant à Richard, il s'est chargé de la création des formulaires de connexion et d'inscription, ainsi que de la mise à jour du projet Kickstarter.
-
+      <br> <br>
+      Semaine 3:<br>
+      Le développement à continuer sans rencontrer de problèmes, la connexion et l'inscription ont été commencées, ces fontionnalitéesseront finis d'ici fin Novembre
     </changelog>
   </div>
 </template>

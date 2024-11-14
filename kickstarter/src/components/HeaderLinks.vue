@@ -43,6 +43,8 @@ let setActiveSection = (section) => {
 
 nav {
   margin-top: 20px;
+  display : flex;
+  justify-content: center;
 }
 
 ul {

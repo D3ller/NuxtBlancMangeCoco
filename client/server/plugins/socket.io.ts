@@ -1,8 +1,7 @@
-import type { NitroApp } from 'nitropack'
-import { Server as Engine } from 'engine.io'
-import { Socket } from 'socket.io'
-import { Server } from 'socket.io'
-import { defineEventHandler } from 'h3'
+import type {NitroApp} from 'nitropack'
+import {Server as Engine} from 'engine.io'
+import {Server, Socket} from 'socket.io'
+import {defineEventHandler} from 'h3'
 import socketServer from '~/lib/socket'
 
 export default defineNitroPlugin((nitroApp: NitroApp) => {
@@ -14,6 +13,7 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
     interface Room {
         id: string
         roomName: string
+        status: string
         players: {
             id:string,
             username?:string,
@@ -29,10 +29,35 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
     let rooms :Room[] = []
 
     socketServer.io.on('connection', (socket: SocketUser) => {
-        
-        socket.username = "user"
+
+        socket.username = "tv"
 
         socket.emit('id', socket.id)
+
+        socket.on("disconnect", (reason) => {
+            console.log("disconnect", reason)
+        });
+
+        // clearTimeout(socket.inactivityTimeout);
+        //
+        // socket.inactivityTimeout = setTimeout(() =>
+        // {
+        //     const room = rooms.find((e) => e.players.find((b) => b.id === socket.id))
+        //     const player = room?.players.find((e) => e.id === socket.id)
+        //
+        //     if(player) {
+        //         if(player.username === 'tv') {
+        //             console.log("la tele ne peut pas quitter la room")
+        //             return;
+        //         }
+        //
+        //         console.log("player left", player)
+        //         room?.players.splice(room?.players.indexOf(player), 1)
+        //         socketServer.io?.emit("player-joined", {clients: room?.players})
+        //         socket.disconnect(true)
+        //     }
+        //
+        // }, 1000 * 60);
 
 
         socket.on('create-server', (roomName, cb) => {
@@ -41,9 +66,12 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
                 const newRoom = {
                     id: "1",
                     roomName,
-                    players: [{ id: socket.id, username: socket.username }],
+                    status: "waiting",
+                    players: [{id: socket.id, username: socket.username, role: 'tv'}],
                 };
                 rooms.push(newRoom);
+
+                console.log(rooms)
 
                 socket.join(roomName);
                 cb({
@@ -63,15 +91,68 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
         });
 
 
-    socket.on('join-server', (roomName, cb) => {
+        socket.on('join-server', (roomName, username, cb) => {
 
         let room = rooms.find((e) => e.roomName == roomName)
 
-        room?.players.push({id: socket.id, username: socket.username})
+            if (!room) {
+                cb({
+                    status: "error",
+                    message: "room does not exist"
+                })
+                return
+            }
+
+            if (room.status === "playing" || room.status === "finished") {
+                cb({
+                    status: "error",
+                    message: "game already started"
+                })
+                return;
+            }
+
+
+            if (room.players.find((e) => e.username === username)) {
+                cb({
+                    status: "error",
+                    message: "username already taken"
+                })
+                return;
+            }
+
+            let findTV = room.players.find((b) => b.username === 'tv');
+            if (findTV && room.status === "waiting") {
+                let findPartyist = room.players.find((b) => b?.role === 'partyist');
+                if (findPartyist) {
+                    room?.players.push({id: socket.id, username: username})
+                } else {
+                    room?.players.push({id: socket.id, username: username, role: 'partyist'})
+                }
+                // room?.players.push({id: socket.id, username: username})
+
+            }
+
+            console.log(room.players.find((e) => e.username === username))
+
+
+
+
+
 
         socket.join(roomName)
 
-        socketServer.io?.emit("player-joined", room.players);
+            console.log(socket.id)
+
+            socketServer.io?.emit("player-joined", {clients: room?.players})
+            cb({
+                status: "room joined",
+                data: {
+                    rooms,
+                    me: socket.id,
+                    players: room?.players
+                }
+            })
+
 
         // let party = rooms.find((e) => e.roomName === roomName)
         

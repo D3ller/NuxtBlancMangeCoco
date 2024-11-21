@@ -6,7 +6,6 @@ import Piment from "~/components/global/section/piment.vue";
 import FAQ from "~/components/global/section/FAQ.vue";
 
 import Button from "~/components/global/button.vue";
-import GameCard from "~/components/global/card/gameCard.vue";
 const router = useRouter()
 
 const socket = io({
@@ -15,7 +14,7 @@ const socket = io({
 })
 
 let text = ref('')
-// let created = ref(false)
+let username = ref('')
 
 function createRoom(roomName) {
   socket.emit('create-server', roomName, (response) => {
@@ -24,22 +23,23 @@ function createRoom(roomName) {
       console.log(response.data);
       router.push(`/room/${roomName}`);
     } else if (response.status === "error") {
-      console.error(response.message); // Afficher l'erreur côté client
+      console.error(response.message);
     }
   });
 }
 
 
-function joinRoom(roomName) {
-  socket.emit('join-server', roomName, (e) => {
+function joinRoom(roomName, Myusername) {
+  socket.emit('join-server', roomName, Myusername, (e) => {
     console.log(e)
+    if(e.status === "error") {
+      console.error(e)
+      return
+    }
     router.push(`room/${roomName}`)
   })
-  router.push(`room/${roomName}`)
+  // router.push(`room/${roomName}`)
 }
-// socket.on('player-joined', (e) => {
-//   console.log(e)
-// })
 
 socket.on('error', (err) => {
   alert(err)
@@ -59,8 +59,9 @@ socket.on('error', (err) => {
   <!-- <game-card text="j'ai des margiela a mes  pieds toi t'en a pas lalalilalair" variant=""></game-card> -->
 
   <input v-model="text">
+  <input v-model="username" placeholder="username">
   <Button @click="createRoom(text)">Crée une room</Button>
-  <Button @click="joinRoom(text)">Join room</Button>
+  <Button @click="joinRoom(text, username)">Join room</Button>
   <!-- <Button v-if="created" @click="launchParty">Lancer la partie</Button> -->
   ======= ssssssss
 </template>

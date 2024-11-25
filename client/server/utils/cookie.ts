@@ -38,6 +38,6 @@ export function unsign(input: string, secret: CookieSecret) {
             message: "Invalid cookie signature",
         });
     }
-
+    
     return value;
 }

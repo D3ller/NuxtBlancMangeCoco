@@ -1,5 +1,5 @@
 import type { H3Event } from "h3";
-import { getUserById } from "~~/server/models/user";
+import { getUserById } from "~~/server/models/user.schema";
 
 export async function getUserFromSession(event: H3Event) {
     const config = useRuntimeConfig(event);
@@ -11,6 +11,8 @@ export async function getUserFromSession(event: H3Event) {
     if (!unsignedSession) return null;
 
     const session = deserialize(unsignedSession);
-
+    console.log(session.email)
+    // console.log(session)
+    // console.log(getUserById(session.userId))
     return getUserById(session.userId);
 }

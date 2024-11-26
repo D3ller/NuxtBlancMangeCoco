@@ -1,4 +1,25 @@
 <script setup lang="ts">
+let data = reactive({
+  email: '',
+  pseudo: '',
+  password: '',
+  error: ''
+})
+
+function submitRegister() {
+  if (data.email === '' || data.password === '' || data.pseudo === '') {
+    this.error = "Veuillez remplir tous les champs.";
+  } else {
+    this.error = '';
+    console.log("Email:", data.email, "Pseudo:", data.pseudo, "Password:", data.password);
+  }
+}
+
+function registerWith(provider) {
+  console.log("Inscription via", provider);
+}
+
+
 </script>
 
 <template>
@@ -11,7 +32,7 @@
           <input
               type="email"
               id="email"
-              v-model="email"
+              v-model="data.email"
               required
               placeholder="Entrez votre email"
           />
@@ -22,7 +43,7 @@
           <input
               type="text"
               id="pseudo"
-              v-model="pseudo"
+              v-model="data.pseudo"
               required
               placeholder="Entrez votre pseudo"
           />
@@ -33,7 +54,7 @@
           <input
               type="password"
               id="password"
-              v-model="password"
+              v-model="data.password"
               required
               placeholder="Entrez votre mot de passe"
           />
@@ -41,7 +62,7 @@
 
         <button type="submit">S'inscrire</button>
 
-        <p v-if="error" class="error-message">{{ error }}</p>
+        <p v-if="data.error" class="error-message">{{ data.error }}</p>
 
         <!-- Boutons sociaux pour l'inscription -->
         <div class="social">
@@ -65,33 +86,6 @@
     <router-link class="inscrit" to="/login">Déjà inscrit ? Cliquez ici</router-link>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      email: '',
-      pseudo: '',
-      password: '',
-      error: ''
-    };
-  },
-  methods: {
-    submitRegister() {
-      if (this.email === '' || this.password === '' || this.pseudo === '') {
-        this.error = "Veuillez remplir tous les champs.";
-      } else {
-        this.error = '';
-        console.log("Email:", this.email, "Pseudo:", this.pseudo, "Password:", this.password);
-      }
-    },
-    registerWith(provider) {
-      console.log("Inscription via", provider);
-      // Ajouter ici la logique pour les inscriptions via les services sociaux.
-    }
-  }
-};
-</script>
 
 <style scoped>
 .form {

@@ -1,5 +1,5 @@
 import { verifyPassword } from "~/server/utils/password";
-import { getUserByEmail } from "~~/server/models/user";
+import { getUserByEmail } from "~/server/models/user.schema";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<{ email: string; password: string; rememberMe: boolean }>(event);
@@ -30,20 +30,24 @@ export default defineEventHandler(async (event) => {
 
     const config = useRuntimeConfig();
 
-    const session = serialize({ userId: userWithPassword.id });
+    const session = serialize({ userId: userWithPassword._id.toHexString() });
+    // console.log(session)
     const signedSession = sign(session, config.cookieSecret);
 
     setCookie(event, config.cookieName, signedSession, {
         httpOnly: true,
         path: "/",
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
         expires: rememberMe
             ? new Date(Date.now() + parseInt(config.cookieRememberMeExpires))
             : new Date(Date.now() + parseInt(config.cookieExpires)),
     });
 
     const { password: _password, ...userWithoutPassword } = userWithPassword;
+
+    console.log(userWithoutPassword)
 
     return {
         user: userWithoutPassword,

@@ -5,24 +5,13 @@
       <form @submit.prevent="submitLogin">
         <div class="form-group">
           <label for="email">Email</label>
-          <input
-              type="email"
-              id="email"
-              v-model="login.email"
-              required
-              placeholder="Entrez votre email"
-          />
+          <input type="email" id="email" v-model="loginCred.email" required placeholder="Entrez votre email" />
         </div>
 
         <div class="form-group">
           <label for="password">Mot de passe</label>
-          <input
-              type="password"
-              id="password"
-              v-model="login.password"
-              required
-              placeholder="Entrez votre mot de passe"
-          />
+          <input type="password" id="password" v-model="loginCred.password" required
+            placeholder="Entrez votre mot de passe" />
         </div>
 
         <button type="submit">Se connecter</button>
@@ -55,18 +44,21 @@
 <script setup>
 const router = useRouter()
 
-let login = reactive({
+const { login } = useAuth()
+
+let loginCred = reactive({
   email: '',
   password: '',
   error: ''
 })
 
-let submitLogin = () => {
-  if(login.email === '' || login.password === '') {
-    login.error = "Veuillez remplir tous les champs.";
+let submitLogin = async () => {
+  if (loginCred.email === '' || loginCred.password === '') {
+    loginCred.error = "Veuillez remplir tous les champs.";
   }
 
-  console.log(login);
+  await login(loginCred.email, loginCred.password, 'default')
+
 };
 
 let loginWith = (provider) => {
@@ -163,14 +155,16 @@ button:hover {
 
 @media screen and (max-width: 768px) {
   .inscrit {
-    margin: 5px 0; /* Ajuster la marge pour les petits écrans */
+    margin: 5px 0;
+    /* Ajuster la marge pour les petits écrans */
   }
 }
 
 /* Styles responsifs pour des écrans encore plus petits (mobiles) */
 @media screen and (max-width: 480px) {
   .inscrit {
-    margin: 5px 0; /* Ajuster encore la marge pour les très petits écrans */
+    margin: 5px 0;
+    /* Ajuster encore la marge pour les très petits écrans */
   }
 }
 
@@ -197,12 +191,16 @@ button:hover {
   font-size: 20px;
   color: white;
 }
+
 .social-btn img {
-  width: 34px; /* Taille de l'image */
+  width: 34px;
+  /* Taille de l'image */
   height: 24px;
-  display: block; /* Pour centrer l'image */
+  display: block;
+  /* Pour centrer l'image */
   object-fit: contain;
 }
+
 .discord {
   background-color: #5F6FBE;
 }

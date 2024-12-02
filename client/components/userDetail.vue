@@ -3,7 +3,10 @@ let props = defineProps<{user: object}>();
 </script>
 
 <template>
-  {{props.user}}
+  <div style="background-color: red;">
+    <h2><b>Dans le header / UserDetails</b></h2>
+    {{props.user}}
+  </div>
 </template>
 
 <style scoped>

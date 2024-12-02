@@ -5,6 +5,7 @@ export function getGoogleUserInfo(token: string) {
             Authorization: `Bearer ${token}`,
         },
     }).then((res) => {
+        // console.log(res)
         return res;
     })
 }
@@ -15,7 +16,7 @@ export function getDiscordUserInfo(token: string) {
             Authorization: `Bearer ${token}`,
         },
     }).then((res) => {
-        console.log(res);
+        // console.log(res);
         return res;
     })
 }

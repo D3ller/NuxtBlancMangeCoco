@@ -4,10 +4,18 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/index.css'],
   runtimeConfig: {
-    cookieName: "session",
-    cookieSecret: "secret",
-    cookieExpires: 86400,
-    cookieRememberMeExpires: 604800
+    cookieName: process.env.COOKIE_NAME,
+    cookieSecret: process.env.COOKIE_SECRET,
+    cookieExpires: process.env.COOKIE_EXPIRES,
+    cookieRememberMeExpires: process.env.COOKIE_REMEMBER_ME_EXPIRES,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  },
+  mongoose: {
+    uri: process.env.MONGO_URI,
+    options: {},
+    modelsDir: 'models',
+    devtools: true,
   },
   pinia: {
     storeDirs: ['./stores/**']
@@ -46,5 +54,5 @@ export default defineNuxtConfig({
       websocket: true,
     },
   },
-  modules: ['@nuxt/fonts', '@nuxt/image', '@pinia/nuxt'],
+  modules: ['@nuxt/fonts', '@nuxt/image', '@pinia/nuxt', 'nuxt-mongoose'],
 })

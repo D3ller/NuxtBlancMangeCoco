@@ -1,3 +1,6 @@
+import mongoose from 'mongoose';
+import {blue_cards, white_cards} from "../server.ts";
+
 export enum UserRoles {
     USER = "user",
     TV = "tv",
@@ -9,6 +12,7 @@ export class User {
     id: number;
     role: string;
     socketId: string;
+    cards: string[] = [];
 
     constructor(username: string, id: number, role: string = UserRoles.USER, socketId: string) {
         this.username = username;
@@ -37,6 +41,8 @@ export class Room {
     name: string;
     id: number;
     status: string = RoomStatus.WAITING;
+    wCards = white_cards;
+    bCards = blue_cards;
 
     constructor(name: string, id: number, users?: User) {
         this.name = name;
@@ -70,6 +76,30 @@ export class Room {
     public addUser(user: User) {
         this.users.push(user);
     }
+
+    public distributeCards() {
+        console.log(this.wCards.length);
+        let playerCount = this.users.length;
+
+        for (let i = 0; i < playerCount; i++) {
+            let player = this.users[i];
+
+            if (player.role === UserRoles.TV) {
+                continue;
+            }
+
+            let playerCards: string[] = [];
+            for (let j = 0; j < 11; j++) {
+                let randomIndex = Math.floor(Math.random() * this.wCards.length);
+                playerCards.push(this.wCards[randomIndex]);
+                this.wCards.splice(randomIndex, 1);
+            }
+            player.cards = playerCards;
+        }
+
+        console.log(this.wCards.length);
+    }
+
 
 }
 

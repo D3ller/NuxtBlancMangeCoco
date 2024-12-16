@@ -2,7 +2,7 @@ import {Server} from "socket.io";
 import {addRoom, Room, rooms, RoomStatus, User, UserRoles} from "./utils";
 import {Messages} from "./utils/message.ts";
 
-export const setupWebSockets = (server) => {
+export const setupWebSockets = (server :any) => {
     const io = new Server(server, {
         cors: {
             origin: '*',
@@ -131,7 +131,15 @@ export const setupWebSockets = (server) => {
             }
 
             currentRoom.status = RoomStatus.STARTED;
+            currentRoom.distributeCards();
             io.to(roomName).emit('game-started', currentRoom);
+
+            currentRoom.users.forEach(user => {
+                if (user.role === UserRoles.TV) return;
+                console.log(user.cards);
+                io.to(user.socketId).emit('cards', user.cards);
+            })
+
             callback({
                 success: true,
                 message: "La partie a commencé."

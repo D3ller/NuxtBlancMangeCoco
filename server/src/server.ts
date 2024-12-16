@@ -1,8 +1,9 @@
 import express from 'express';
-import { createServer } from 'http';
+import {createServer} from 'http';
 import cors from 'cors';
 import {setupWebSockets} from './websocket.ts';
 import {rooms} from "./utils";
+import mongoose from "mongoose";
 
 const app = express();
 const server = createServer(app);
@@ -19,6 +20,29 @@ app.get('/', (req, res) => {
 app.get('/room', (req, res) => {
   res.send(rooms);
 })
+
+export let white_cards: [] = [];
+export let blue_cards: [] = [];
+
+mongoose.connect('mongodb://sae501:aeibbsqGaHDpzgA@emilienrozier.fr:8080/sae501')
+    .then(async () => {
+        console.log('Connecté!');
+
+        const db = mongoose.connection.db;
+        const fetchCollectionContent = async (collectionName) => {
+            const collection = db.collection(collectionName);
+            return await collection.find().toArray();
+        };
+
+        white_cards = await fetchCollectionContent('white_cards');
+        blue_cards = await fetchCollectionContent('blue_cards');
+
+        mongoose.connection.close();
+    })
+    .catch(err => console.error('Erreur:', err));
+
+
+
 
 setupWebSockets(server);
 

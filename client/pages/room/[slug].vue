@@ -3,8 +3,8 @@
   <div>
     <p class="title">Room: {{ roomName }}</p>
       <div v-if="players" id="players">
-        <div class="player-item" v-for="p in players.clients">
-      {{ p.username }} <span v-if="p.role === 'partyist'">(Admin)</span>
+        <div class="player-item" v-for="p in players">
+          {{ p.username }}
         </div>
   </div>
   <div v-else>
@@ -12,45 +12,58 @@
   </div>
   </div>
   <button @click="quit()">quit</button>
+    <button @click="start()">start</button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { io } from "socket.io-client";
+import socket from '../../utils/socket';
+
 let players = ref()
 
 definePageMeta({
-  layout: 'room',
-  middleware: "user-only"
+  layout: 'room'
 })
 
-const router = useRouter()
 let route = useRoute();
-// console.log(route.params.slug)
+let roomName = route.params.slug;
 
-let roomName = route.params.slug
-
-const socket = io({
-  path: '/api/ws',
-  addTrailingSlash: false,
+let rooms = reactive({
+  players: [],
+  started: false,
 })
 
+async function quit() {
+  alert('quit')
+  await socket.emit('leave-players', roomName, (e) => {
+    console.log(e);
+  })
+  // socket.disconnect()
+  // router.push('/')
+}
 
-function quit() {
-  socket.disconnect()
-  router.push('/')
+function start() {
+  socket.emit('start-game', roomName, (e) => {
+    console.log(e);
+  })
 }
 
 onMounted(() => {
   socket.emit('get-players', roomName, (e) => {
-    console.log(e)
-    players.value = e
+    console.log(e.players.users);
+    players.value = e.players.users;
   })
 })
 
-socket.on('player-joined', (e) => {
-  console.log(e)
-  players.value = e
-  console.log(players)
+socket.on('room-update', (e) => {
+  console.log(e);
+  if (e.users) {
+    players.value = e?.users;
+  }
+  // players.value = e.users;
+})
+
+socket.on('cards', (e) => {
+  console.log(e);
 })
 </script>

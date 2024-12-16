@@ -1,45 +1,28 @@
 <script setup>
-
-import {io} from 'socket.io-client'
 import HeaderBanner from "~/components/global/section/headerBanner.vue";
 import Piment from "~/components/global/section/piment.vue";
 import FAQ from "~/components/global/section/FAQ.vue";
 
 import Button from "~/components/global/button.vue";
-import GameCard from "~/components/global/card/gameCard.vue";
 const router = useRouter()
 
-const socket = io({
-  path: '/api/ws',
-  addTrailingSlash: false,
-})
+import socket from '../utils/socket'
+
 
 let text = ref('')
-// let created = ref(false)
+let username = ref('')
 
-function createRoom(roomName) {
-  socket.emit('create-server', roomName, (response) => {
-    console.log(response);
-    if (response.status === "room created") {
-      console.log(response.data);
-      router.push(`/room/${roomName}`);
-    } else if (response.status === "error") {
-      console.error(response.message); // Afficher l'erreur côté client
+
+function joinRoom(Myusername) {
+  socket.emit('join-server', 'test', Myusername, (e) => {
+    if(e.status === "error") {
+      console.error(e)
+      return
     }
-  });
-}
-
-
-function joinRoom(roomName) {
-  socket.emit('join-server', roomName, (e) => {
     console.log(e)
-    router.push(`room/${roomName}`)
+    router.push(`room/test`)
   })
-  router.push(`room/${roomName}`)
 }
-// socket.on('player-joined', (e) => {
-//   console.log(e)
-// })
 
 socket.on('error', (err) => {
   alert(err)
@@ -58,9 +41,8 @@ socket.on('error', (err) => {
 
   <!-- <game-card text="j'ai des margiela a mes  pieds toi t'en a pas lalalilalair" variant=""></game-card> -->
 
-  <input v-model="text">
-  <Button @click="createRoom(text)">Crée une room</Button>
-  <Button @click="joinRoom(text)">Join room</Button>
+  <input v-model="username" placeholder="username">
+  <Button @click="joinRoom(username)">Join room</Button>
   <!-- <Button v-if="created" @click="launchParty">Lancer la partie</Button> -->
   ======= ssssssss
 </template>

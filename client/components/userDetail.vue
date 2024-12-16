@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import Avatar from "~/components/global/Avatar.vue";
+
 let props = defineProps<{user: object}>();
 </script>
 
 <template>
-  <div style="background-color: red;">
-    <h2><b>Dans le header / UserDetails</b></h2>
-    {{props.user}}
-  </div>
+  <NuxtLink :to="{name: 'profile'}">
+    <Avatar class="rounded" :alt="props.user.email" :src="props.user.email"/>
+  </NuxtLink>
 </template>
 
 <style scoped>

@@ -1,16 +1,9 @@
 <script setup lang="ts">
-let props = defineProps({
-  variant: {
-    type: String,
-    default: "",
-    validator(value, props) {
-      return ["", "word"].includes(value);
-    }
-  },
-  text: {
-    type: String,
-    required: true
-  }
+let props = withDefaults(defineProps<{
+  variant: "" | "word",
+  text: string
+}>(), {
+  variant: ""
 })
 </script>
 

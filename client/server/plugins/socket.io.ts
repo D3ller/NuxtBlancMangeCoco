@@ -5,8 +5,12 @@ import {defineEventHandler} from 'h3'
 import socketServer from '~/lib/socket'
 
 export default defineNitroPlugin((nitroApp: NitroApp) => {
+
     const engine = new Engine()
-    socketServer.io = new Server()
+    socketServer.io = new Server({
+        pingTimeout: 0,
+        pingInterval: 0,
+    })
     socketServer.io.bind(engine)
 
     //interface à déplacer plus tard
@@ -34,9 +38,6 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
         socket.emit('id', socket.id)
 
-        socket.on("disconnect", (reason) => {
-            console.log("disconnect", reason)
-        });
 
         // clearTimeout(socket.inactivityTimeout);
         //
@@ -79,7 +80,7 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
                     data: {
                         rooms,
                         me: socket.id,
-                        players: newRoom.players, // Utilisez la room nouvellement créée
+                        players: newRoom.players,
                     },
                 });
             } else {
@@ -92,6 +93,9 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
 
         socket.on('join-server', (roomName, username, cb) => {
+
+            console.log(socket.id + " joined " + roomName)
+            socket.emit('id', socket.id)
 
         let room = rooms.find((e) => e.roomName == roomName)
 
@@ -181,8 +185,23 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
     socket.on('get-players', (roomName, cb) => {
 
+        const room = rooms.find((e) => e.roomName == roomName)
+        if(!room) {
+            cb({
+                success: false,
+                message: "room does not exist"
+            })
+            return
+        }
+
+        const roomWOrole = room.players.map((e) => {
+            if(e.username === 'tv') return e
+            delete e.role
+            return e
+        })
+        //
         cb({
-            clients: rooms.find((e) => e.roomName == roomName)?.players
+            clients: roomWOrole
         })
     })
 })

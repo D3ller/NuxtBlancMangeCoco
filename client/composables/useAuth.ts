@@ -11,12 +11,14 @@ export const useAuth = () => {
     cookie.value = cookie;
   };
 
-  const login = async (username, password) => {
-    const data = $fetch('/auth/login', {
+  const login = async (username :string, password :string, loginMethod :string) => {
+    const data = await $fetch('/auth/login', {
       method: 'POST',
       body: {
         email: username,
-        password: password
+        password: password,
+        rememberMe: true,
+        loginMethod
       }
     })
 
@@ -31,6 +33,8 @@ export const useAuth = () => {
         const data = await $fetch("/auth/me", {
           headers: useRequestHeaders(["cookie"]) as HeadersInit,
         });
+
+        console.log(data)
 
         setUser(data.user);
       } catch (error) {

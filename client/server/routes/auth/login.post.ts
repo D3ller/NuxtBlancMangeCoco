@@ -1,52 +1,55 @@
-import {verify} from "~/server/utils/password";
-import {serialize, sign} from "~/server/utils/cookie";
-import {getUserByEmail} from "~/server/models/user";
+import { verifyPassword } from "~/server/utils/password";
+import { getUserByEmail } from "~/server/models/user.schema";
 
 export default defineEventHandler(async (event) => {
+    const body = await readBody<{ email: string; password: string; rememberMe: boolean }>(event);
 
-    const {email, password} = await readBody(event);
-    const config = useRuntimeConfig();
-
+    const { email, password, rememberMe } = body;
     if (!email || !password) {
         throw createError({
-            message: "Email and password are required",
-            status: 400
-        })
+            statusCode: 400,
+            message: "Email address and password are required",
+        });
     }
 
-    const user = await getUserByEmail(email);
-    if (!user) {
+    const userWithPassword = await getUserByEmail(email);
+    if (!userWithPassword) {
         throw createError({
-            message: "User not found",
-            status: 404
-        })
+            statusCode: 401,
+            message: "Bad credentials",
+        });
     }
 
-    const passwordMath = await verify(user.password, password);
-    if (!passwordMath) {
+    const verified = await verifyPassword(userWithPassword.password, password);
+    if (!verified) {
         throw createError({
-            message: "Password is incorrect",
-            status: 400
-        })
+            statusCode: 401,
+            message: "Bad credentials",
+        });
     }
 
-    const token = serialize({userId: user.id});
-    const tokenSession = sign(token, config.cookieSecret);
+    const config = useRuntimeConfig();
 
-    setCookie(event, config.cookieName, tokenSession, {
+    const session = serialize({ userId: userWithPassword._id.toHexString() });
+    // console.log(session)
+    const signedSession = sign(session, config.cookieSecret);
+
+    setCookie(event, config.cookieName, signedSession, {
         httpOnly: true,
         path: "/",
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
         expires: rememberMe
             ? new Date(Date.now() + parseInt(config.cookieRememberMeExpires))
             : new Date(Date.now() + parseInt(config.cookieExpires)),
     });
 
-    const {password: _password, ...userWithoutPassword} = userWithPassword;
+    const { password: _password, ...userWithoutPassword } = userWithPassword;
+
+    console.log(userWithoutPassword)
 
     return {
-        user: userWithoutPassword
-    }
-
-})
+        user: userWithoutPassword,
+    };
+});

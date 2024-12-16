@@ -26,7 +26,7 @@ let card: { title: string, text: string } = [{
     </div>
 
     <div class="flex">
-      <Button variant="dark">Découvrir nos sets</Button>
+      <Button href="/set" variant="dark">Découvrir nos sets</Button>
     </div>
 
 

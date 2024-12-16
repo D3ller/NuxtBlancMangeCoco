@@ -22,11 +22,11 @@ let footer = [
     subLink: [
       {
         title: "Connexion",
-        to: "/connexion"
+        to: "/login"
       },
       {
         title: "Inscription",
-        to: "/inscription"
+        to: "/register"
       }
     ]
   }

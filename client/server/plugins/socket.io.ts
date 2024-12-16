@@ -38,10 +38,28 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
         socket.emit('id', socket.id)
 
-        socket.on("disconnect", (reason) => {
-            socket.emit('id', socket.id)
-            console.log("disconnect", reason)
-        });
+
+        // clearTimeout(socket.inactivityTimeout);
+        //
+        // socket.inactivityTimeout = setTimeout(() =>
+        // {
+        //     const room = rooms.find((e) => e.players.find((b) => b.id === socket.id))
+        //     const player = room?.players.find((e) => e.id === socket.id)
+        //
+        //     if(player) {
+        //         if(player.username === 'tv') {
+        //             console.log("la tele ne peut pas quitter la room")
+        //             return;
+        //         }
+        //
+        //         console.log("player left", player)
+        //         room?.players.splice(room?.players.indexOf(player), 1)
+        //         socketServer.io?.emit("player-joined", {clients: room?.players})
+        //         socket.disconnect(true)
+        //     }
+        //
+        // }, 1000 * 60);
+
 
         socket.on('create-server', (roomName, cb) => {
             const roomExists = rooms.find((e) => e.roomName === roomName);
@@ -53,6 +71,8 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
                     players: [{id: socket.id, username: socket.username, role: 'tv'}],
                 };
                 rooms.push(newRoom);
+
+                console.log(rooms)
 
                 socket.join(roomName);
                 cb({
@@ -116,6 +136,7 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
             }
 
+            console.log(room.players.find((e) => e.username === username))
 
 
 

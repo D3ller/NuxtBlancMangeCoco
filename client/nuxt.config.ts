@@ -49,10 +49,5 @@ export default defineNuxtConfig({
       'sans-serif': ['Arial'],
     },
   },
-  nitro: {
-    experimental: {
-      websocket: true,
-    },
-  },
-  modules: ['@nuxt/fonts', '@nuxt/image', '@pinia/nuxt', 'nuxt-mongoose'],
+  modules: ['@nuxt/fonts', '@nuxt/image', 'nuxt-mongoose'],
 })

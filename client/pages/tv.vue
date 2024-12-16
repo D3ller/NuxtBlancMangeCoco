@@ -14,11 +14,6 @@ onMounted(() => {
   loaded.value = true
 })
 
-const socket = io({
-  path: '/api/ws',
-  addTrailingSlash: false,
-})
-
 let player = ref([]);
 
 socket.emit('create-server', code, (e) => {

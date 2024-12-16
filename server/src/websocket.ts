@@ -10,6 +10,7 @@ export const setupWebSockets = (server :any) => {
     });
 
     io.on("connection", (socket) => {
+        console.log(`Connecté: ${socket.id}`);
         socket.emit('id', socket.id);
 
         socket.on('disconnect', () => {
@@ -144,6 +145,28 @@ export const setupWebSockets = (server :any) => {
                 success: true,
                 message: "La partie a commencé."
             })
+        })
+
+        socket.on('choose-card', (roomName: string, index: number, callback) => {
+          //get players by socketID
+            let currentRoom = rooms.find(room => room.name === roomName);
+            if (!currentRoom) {
+                return callback({
+                    success: false,
+                    message: Messages.ROOM_NOT_FOUND
+                })
+            }
+
+            let user = currentRoom.users.find(user => user.socketId === socket.id);
+            if (!user) {
+                return callback({
+                    success: false,
+                    message: Messages.USERNAME_ALREADY_TAKEN
+                })
+            }
+
+            io.to(roomName).emit('card-chosen', `${user.username} a choisi la carte ${user.cards[index].text}`);
+
         })
     });
 

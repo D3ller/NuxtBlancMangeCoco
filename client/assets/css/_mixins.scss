@@ -1,6 +1,15 @@
 @import "variable";
 @import "functions";
 
+.rounded {
+  border-radius: rem(999);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 @mixin button {
   &-default {
     border: 0;
@@ -88,7 +97,8 @@
   font-family: $theme-font;
   font-size: 18px;
   font-weight: 800;
-  width: 255px;
+  min-width: 255px;
+  max-width: 255px;
   height: 353px;
   padding: rem(20);
   border-radius: rem(10);

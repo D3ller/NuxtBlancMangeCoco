@@ -160,6 +160,99 @@ body {
     }
   }
 
+  #page_room {
+    padding: 1rem;
+
+    .title {
+      font-size: rem(24);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: $white;
+    }
+
+    #players {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      margin-bottom: 1rem;
+      .player-item {
+        background: $box-bg-color;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        flex-direction: column;
+        border: $box-border-color;
+        gap: 0.5rem;
+        color: white;
+        width: 200px;
+      }
+    }
+
+  }
+
+  #page_tv {
+    #tv_loaded {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+
+      .start {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      .nav {
+        display: flex;
+        position: absolute;
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        gap: 1rem;
+        width: fit-content;
+
+        .nav-item {
+          background: #323030;
+          padding: 1.5rem;
+          border-radius: 1rem;
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #ffffff0d;
+          gap: 0.5rem;
+          color: #b6b6b6;
+
+          span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            transition: 0.3s;
+          }
+        }
+      }
+    }
+
+    .aside {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .aside-item {
+        background: $box-bg-color;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        border: $box-border-color;
+        gap: 0.5rem;
+        color: white;
+        width: 200px;
+      }
+    }
+  }
+
 }
 
 .grid {

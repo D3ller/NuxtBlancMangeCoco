@@ -1,0 +1,21 @@
+{
+  "name": "express",
+  "module": "src/server.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/server.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.0",
+    "socket.io": "^4.8.1"
+  }
+}

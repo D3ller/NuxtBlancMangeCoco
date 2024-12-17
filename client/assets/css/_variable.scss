@@ -1,0 +1,35 @@
+$theme-color: #0040FF;
+$theme-hover-color: #0139DF;
+$bg-color: #141414;
+$title-color: $bg-color;
+$text-description: #B8B8B8;
+$white: #fff;
+$theme-font: "Satoshi", sans-serif;
+$grid-columns: 12;
+$gutter: 16px;
+
+$box-bg-color: #323030;
+$box-border-color: 1px solid #ffffff0d;
+
+$def:          320px;
+
+$xs: 23.5em;
+
+$sm:            36em;
+$md:            48em;
+$lg:            62em;
+$gl:            64em;
+$xl:            75em;
+
+
+$col-sm:        640px;
+$col-md:        768px;
+$col-lg:        1024px;
+$col-xl:        1280px;
+
+$breakpoints: (
+        sm: $sm,
+        md: $md,
+        lg: $lg,
+        xl: $xl
+);

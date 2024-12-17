@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import {blue_cards, white_cards} from "../server.ts";
 
 export enum UserRoles {
@@ -13,6 +12,7 @@ export class User {
     role: string;
     socketId: string;
     cards: string[] = [];
+    win: number = 0;
 
     constructor(username: string, id: number, role: string = UserRoles.USER, socketId: string) {
         this.username = username;
@@ -43,6 +43,8 @@ export class Room {
     status: string = RoomStatus.WAITING;
     wCards = white_cards;
     bCards = blue_cards;
+    currentCard: string[] = [];
+    currentAnswer : number = 1;
 
     constructor(name: string, id: number, users?: User) {
         this.name = name;
@@ -77,6 +79,13 @@ export class Room {
         this.users.push(user);
     }
 
+    public RemoveUser(user: User) {
+        const index = this.users.indexOf(user);
+        if (index > -1) {
+            this.users.splice(index, 1);
+        }
+    }
+
     public distributeCards() {
         console.log(this.wCards.length);
         let playerCount = this.users.length;
@@ -86,6 +95,13 @@ export class Room {
 
             if (player.role === UserRoles.TV) {
                 continue;
+            }
+
+            if(player.role === UserRoles.LEADER) {
+                let randomBlueCards = Math.floor(Math.random() * this.bCards.length);
+                this.currentCard = this.bCards[randomBlueCards];
+                console.log(this.currentCard)
+                this.bCards.splice(randomBlueCards, 1);
             }
 
             let playerCards: string[] = [];
@@ -100,6 +116,14 @@ export class Room {
         console.log(this.wCards.length);
     }
 
+    public countAnswer() : boolean {
+        console.log(this.currentAnswer, this.users.length)
+        if(this.currentAnswer === this.users.length-1) {
+            return true
+        }
+        this.currentAnswer++;
+        return false;
+    }
 
 }
 

@@ -2,10 +2,10 @@
 
 import AsideMenu from "@/components/item/asideMenu.vue";
 
-let scrollInside = (e) => {
+let scrollInside = (e : any) => {
   console.log(e)
   let el = document.getElementById(e)
-  el.scrollIntoView({behavior: "smooth"})
+  el?.scrollIntoView({behavior: "smooth"})
 }
 </script>
 

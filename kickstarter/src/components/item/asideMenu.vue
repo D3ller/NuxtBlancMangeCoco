@@ -2,7 +2,7 @@
 import AsideItem from "@/components/item/asideItem.vue";
 import { ref } from "vue";
 
-let menu : {title: string, active: boolean} = ref([
+let menu = ref([
   {title: "Description du projet", active: true, slug: "description"},
   {title: "Note de cadrage", active: false, slug: "note"},
   {title: "Planning", active: false, slug: "planning"},
@@ -12,7 +12,7 @@ let menu : {title: string, active: boolean} = ref([
 
 const emit = defineEmits(['scrollTo'])
 
-let updateActive = (e) => {
+let updateActive = (e : any) => {
   menu.value.forEach(i => {
     i.active = false
   })

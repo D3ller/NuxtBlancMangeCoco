@@ -30,8 +30,8 @@ mongoose.connect(process.env.MONGO_URI)
 
         const db = mongoose.connection.db;
         const fetchCollectionContent = async (collectionName) => {
-            const collection = db.collection(collectionName);
-            return await collection.find().toArray();
+            const collection = db?.collection(collectionName);
+            return await collection?.find().toArray();
         };
 
         white_cards = await fetchCollectionContent('white_cards');

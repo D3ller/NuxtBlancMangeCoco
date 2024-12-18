@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { addRoom, Room, rooms, RoomStatus, User, UserRoles } from "./utils";
 import { Messages } from "./utils/message.ts";
+import bannedWords from './utils/bannedWord.json';
 
 export const setupWebSockets = (server: any) => {
     const io = new Server(server, {
@@ -73,10 +74,18 @@ export const setupWebSockets = (server: any) => {
                 })
             }
 
-            if (currentRoom?.users.length >= 8) {
+            if (currentRoom?.users.length >= 9) {
                 return callback({
                     success: false,
                     message: Messages.ROOM_ALREADY_FULL
+                })
+            }
+
+            const testBanned = username.toLowerCase().split(' ').join('');
+            if (bannedWords.bannedWords.some(word => testBanned.includes(word))) {
+                return callback({
+                    success: false,
+                    message: Messages.USERNAME_BANNED
                 })
             }
 
@@ -121,7 +130,7 @@ export const setupWebSockets = (server: any) => {
                 })
             }
 
-            if (currentRoom.users.length - 1 < 1) {
+            if (currentRoom.users.length - 3 < 1) {
                 return callback({
                     success: false,
                     message: Messages.ROOM_TOO_SMALL

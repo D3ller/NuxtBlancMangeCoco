@@ -15,6 +15,10 @@
     align-items: center;
     gap: rem(16);
     max-height: 48px;
+
+    @media screen and (max-width: $md) {
+      display: none;
+    }
   }
 }
 

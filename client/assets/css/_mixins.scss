@@ -18,6 +18,7 @@ a {
     display: flex;
     box-sizing: border-box;
     padding: 10.7px 17px 11.29px 17px;
+    justify-content: center;
     align-items: center;
     flex-shrink: 0;
     border-radius: 12px;
@@ -88,7 +89,8 @@ a {
     font-family: $theme-font;
     font-size: 18px;
     font-weight: 500;
-    width: 255px;
+    min-width: 255px;
+    max-width: 255px;
     height: 353px;
     padding: rem(20);
     border-radius: rem(10);
@@ -177,6 +179,7 @@ a {
   padding: 1rem;
   border-radius: 0.5rem;
   width: 100%;
+    font-size: 14px;
   &:focus, &:focus-visible, &:active {
     outline: none;
   }

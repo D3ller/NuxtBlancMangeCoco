@@ -13,12 +13,13 @@ const router = useRouter()
 
 let text = ref('')
 let username = ref('')
+let error = ref('')
 
 function joinRoom(Myusername, code) {
   socket.emit('join-server', code, Myusername, (e) => {
     console.log(e)
-    if(e.status === "error") {
-      console.error(e)
+    if (!e.success) {
+      error.value = e.message
       return
     }
     router.push(`room/${code}`)
@@ -37,20 +38,20 @@ socket.on('error', (err) => {
     <header-banner></header-banner>
     <piment></piment>
     <f-a-q></f-a-q>
-<section class="join-party">
-  <div class="container">
-      <h2>Rejoindre une partie?</h2>
-      <div class="max-party">
-      <input placeholder="Code d'invitation" v-model="text">
-      <input v-model="username" placeholder="Votre pseudo">
-      <Button style="cursor: pointer" @click="joinRoom(username, text)">Rejoindre</Button>
+    <section class="join-party">
+      <div class="container">
+        <h2>Rejoindre une partie?</h2>
+        <p class="error" v-if="error">{{ error }}</p>
+        <div class="max-party">
+          <input placeholder="Code d'invitation" v-model="text">
+          <input v-model="username" placeholder="Votre pseudo">
+          <Button style="cursor: pointer" @click="joinRoom(username, text)">Rejoindre</Button>
+        </div>
       </div>
-  </div>
-</section>
+    </section>
 
 
   </div>
-
 
 
 </template>

@@ -121,7 +121,7 @@ export class Room {
     }
 
     public countAnswer() : boolean {
-        if(this.currentAnswer === this.users.length-1) {
+        if(this.currentAnswer === this.users.length-2) {
             this.currentAnswer = 0;
             return true
         }
@@ -135,5 +135,14 @@ export const rooms: Room[] = [];
 
 export function addRoom(room: Room) {
     rooms.push(room);
+}
+
+export function getUserBySocketId(socketId: string): User | undefined {
+    for (let i = 0; i < rooms.length; i++) {
+        let user = rooms[i].users.find(user => user.socketId === socketId);
+        if (user) {
+            return user;
+        }
+    }
 }
 

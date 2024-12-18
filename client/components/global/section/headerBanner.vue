@@ -15,7 +15,7 @@ import GameCard from "~/components/global/card/gameCard.vue";
       </div>
 
       <div class="buttonSection">
-        <Button variant="link">Jouer maintenant !</Button>
+        <Button variant="link" href="/room/list">Jouer maintenant !</Button>
         <Button>Créer une partie</Button>
       </div>
 

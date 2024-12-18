@@ -2,7 +2,7 @@ import express from 'express';
 import {createServer} from 'http';
 import cors from 'cors';
 import {setupWebSockets} from './websocket.ts';
-import {rooms} from "./utils";
+import {getUserBySocketId, rooms} from "./utils";
 import mongoose from "mongoose";
 
 const app = express();
@@ -19,6 +19,11 @@ app.get('/', (req, res) => {
 
 app.get('/room', (req, res) => {
   res.send(rooms);
+})
+
+app.get('/user/:id', (req, res) => {
+    const { id } = req.params;
+    res.send(getUserBySocketId(id));
 })
 
 export let white_cards: [] = [];

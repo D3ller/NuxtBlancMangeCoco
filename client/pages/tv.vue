@@ -72,7 +72,7 @@ room.cardPosition = e;
       </nav>
 
       <NuxtImg style="width: 300px; height: 300px;" :src="room.qrCode" v-if="!room.started"></NuxtImg>
-      <h1 class="start" v-if="room.players.length-1 >= 3">Prêt à démarrer ?</h1>
+      <h1 class="start" v-if="room.players.length-1 >= 3 && !room.started">Prêt à démarrer ?</h1>
     </div>
 
     <div style="display: flex; align-items: center; gap: 2rem;">

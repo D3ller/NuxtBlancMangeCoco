@@ -1,26 +1,31 @@
 <template>
   <div id="page_room">
-  <div>
-    <p class="title">Room: {{ roomName }}</p>
+    <div>
+      <p class="title">Room: {{ roomName }}</p>
       <div v-if="cRoom.players.length > 0 && !cRoom.started" id="players">
         <div class="player-item" v-for="p in cRoom.players">
           {{ p.username }}
         </div>
-  </div>
+      </div>
 
-    <div v-if="cRoom.cards.cards.length > 0 && cRoom.started && cRoom.cards.visible">
-      <cardSelector @chooseCard="choosenCards" :cards="cRoom.cards.cards"/>
+      <h2 v-if="cRoom.waiting" class="waiting">En attente des autres joueurs et du choix du leader...</h2>
+
+      <div v-if="cRoom.cards.cards.length > 0 && cRoom.started && cRoom.cards.visible">
+        <cardSelector class="selector" @chooseCard="choosenCards" :cards="cRoom.cards.cards"/>
+      </div>
     </div>
-  </div>
-  <div v-if="!cRoom.started && cRoom.leader">
-  <button @click="quit()">quit</button>
-    <button @click="start()">start</button>
-  </div>
+    <div class="roomButton">
+      <div v-if="!cRoom.started && cRoom.leader">
+        <Button @click="start()">Démarrer</Button>
+      </div>
+      <Button variant="link" @click="quit()">Quitter</Button>
+    </div>
 
-  <div v-if="cRoom.started && cRoom.leader && cRoom.finalChoice.visible">
-    <span @click="updateCardPosition('down')">fleche de gauche</span>
-    <span @click="updateCardPosition('up')">fleche de droite</span>
-  </div>
+
+    <div v-if="cRoom.started && cRoom.leader && cRoom.finalChoice.visible">
+      <span @click="updateCardPosition('down')">fleche de gauche</span>
+      <span @click="updateCardPosition('up')">fleche de droite</span>
+    </div>
   </div>
 </template>
 
@@ -44,6 +49,7 @@ let cRoom = reactive({
   },
   started: false,
   leader: false,
+  waiting: false,
   finalChoice: {
     visible: false,
     cardPosition: 0,
@@ -57,6 +63,7 @@ let choosenCards = (index: number) => {
   })
 
   cRoom.cards.visible = false
+  cRoom.waiting = true
 }
 
 function quit() {
@@ -68,11 +75,15 @@ function quit() {
 
 function start() {
   socket.emit('start-game', roomName, (e) => {
-    console.log(e, "60")
+    if(!e.success) {
+      console.log(e)
+      return
+    }
+    cRoom.started = true
   })
 }
 
-function updateCardPosition(param :string) {
+function updateCardPosition(param: string) {
   const maxPosition = cRoom.finalChoice.cards.length - 1;
   switch (param) {
     case 'up':
@@ -90,13 +101,21 @@ function updateCardPosition(param :string) {
       }
       socket.emit('cardPosition', cRoom.finalChoice.cardPosition, roomName)
       break;
-    }
+  }
 }
 
 onMounted(() => {
   socket.emit('get-players', roomName, (e) => {
+
+    if(!e.success) {
+      console.log(e)
+      return router.push('/')
+    }
+
     cRoom.players = e.players.users;
-    if(e.currentPlayers && e.currentPlayers.role === "leader") {
+
+
+    if (e.currentPlayers && e.currentPlayers.role === "leader") {
       cRoom.leader = true;
     }
   })

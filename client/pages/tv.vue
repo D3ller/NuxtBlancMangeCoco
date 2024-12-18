@@ -1,35 +1,44 @@
 <script setup lang="ts">
-import {io} from "socket.io-client";
 
 definePageMeta({
   layout: 'tv'
 })
 
-let code = "1234";
+let code = ref(null)
 let qrCode = ref(null)
 let loaded = ref(false)
 
-onMounted(() => {
-  qrCode.value = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${window.location.origin}/room/${code}`
+let player = ref([]);
+let randomName6 = Math.random().toString(36).substring(2, 8);
+
+let bCard :string = ref("");
+
+socket.emit('create-server', randomName6, (e) => {
+  console.log(e)
+  code.value = e.room.name
+  qrCode.value = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${window.location.origin}/join?code=${e.room.name}`
   loaded.value = true
+    socket.emit('get-players', code.value, (e) => {
+      if(e.players) {
+        player.value.push(e.players.users[0])
+      }
+    })
 })
 
-let player = ref([]);
-
-socket.emit('create-server', code, (e) => {
-  console.log(e)
-  if(e.status === "error") {
-    socket.emit('get-players', code, (e) => {
-      console.log(e.clients)
-      player.value = e.clients
-    })
+socket.on('room-update', (e) => {
+  console.log(e);
+  if (e?.users) {
+    player.value = e.users
   }
 })
 
-socket.on('player-joined', (e) => {
-  console.log(e.clients[0])
-  console.log(e.clients)
-  player.value = e.clients
+socket.on('blue-card', (e) => {
+  console.log(e.text)
+  bCard.value = e.text
+})
+
+socket.on('tv', (e) => {
+  console.log(e)
 })
 </script>
 
@@ -44,14 +53,16 @@ socket.on('player-joined', (e) => {
         </div>
         <div class="nav-item">
           <p>Nombre de joueurs:</p>
-          <span :style="player.length-1 === 0 ? 'filter: blur(10px);' : ''">{{
-              player.length === 0 ? player.length : player.length - 1
-            }}</span>
+          <span>{{player.length}}</span>
         </div>
       </nav>
 
       <NuxtImg style="width: 300px; height: 300px;" :src="qrCode"/>
       <h1 class="start" v-if="player.length-1 >= 3">Prêt à démarrer ?</h1>
+    </div>
+
+    <div v-if="bCard">
+      {{ bCard }}
     </div>
 
     <aside class="aside" v-if="player.length > 0">

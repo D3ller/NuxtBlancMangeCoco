@@ -10,14 +10,14 @@ const router = useRouter()
 let text = ref('')
 let username = ref('')
 
-function joinRoom(Myusername) {
-  socket.emit('join-server', 'test', Myusername, (e) => {
+function joinRoom(Myusername, code) {
+  socket.emit('join-server', code, Myusername, (e) => {
     console.log(e)
     if(e.status === "error") {
       console.error(e)
       return
     }
-    router.push(`room/test`)
+    router.push(`room/${code}`)
   })
 }
 
@@ -37,8 +37,9 @@ socket.on('error', (err) => {
   </div>
 
 
+  <input placeholder="code" v-model="text">
   <input v-model="username" placeholder="username">
-  <Button @click="joinRoom(username)">Join room</Button>
+  <Button @click="joinRoom(username, text)">Join room</Button>
 </template>
 
 <style scoped>

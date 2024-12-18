@@ -50,8 +50,10 @@ let choosenCards = (index: number) => {
 }
 
 function quit() {
-  socket.disconnect()
-  router.push('/')
+  socket.emit('leave-room', roomName, (e) => {
+    console.log(e)
+    router.push('/')
+  })
 }
 
 function start() {

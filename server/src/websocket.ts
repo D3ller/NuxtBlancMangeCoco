@@ -1,8 +1,8 @@
-import {Server} from "socket.io";
-import {addRoom, Room, rooms, RoomStatus, User, UserRoles} from "./utils";
-import {Messages} from "./utils/message.ts";
+import { Server } from "socket.io";
+import { addRoom, Room, rooms, RoomStatus, User, UserRoles } from "./utils";
+import { Messages } from "./utils/message.ts";
 
-export const setupWebSockets = (server :any) => {
+export const setupWebSockets = (server: any) => {
     const io = new Server(server, {
         cors: {
             origin: '*',
@@ -40,7 +40,7 @@ export const setupWebSockets = (server :any) => {
                 return;
             }
 
-            const room: Room = new Room(roomName, Room.generateRoomId(), new User("TV", 1, UserRoles.TV, "1"));
+            const room: Room = new Room(roomName, Room.generateRoomId(), new User("TV", 1, UserRoles.TV, socket.id));
             addRoom(room);
             socket.join(roomName);
             callback({
@@ -117,14 +117,14 @@ export const setupWebSockets = (server :any) => {
                 })
             }
 
-            if (currentRoom.users.length-1 < 3) {
+            if (currentRoom.users.length - 1 < 1) {
                 return callback({
                     success: false,
                     message: Messages.ROOM_TOO_SMALL
                 })
             }
 
-            if(currentRoom.status === RoomStatus.STARTED){
+            if (currentRoom.status === RoomStatus.STARTED) {
                 return callback({
                     success: false,
                     message: Messages.ALREADY_STARTED
@@ -136,7 +136,12 @@ export const setupWebSockets = (server :any) => {
             io.to(roomName).emit('game-started', currentRoom);
 
             currentRoom.users.forEach(user => {
-                if (user.role === UserRoles.TV) return;
+                if (user.role === UserRoles.TV) {
+                    console.log(currentRoom.currentCard);
+                    io.to(user.socketId).emit('blue-card', currentRoom.currentCard);
+                    return
+                }
+                //if (user.role === UserRoles.LEADER) return;
                 console.log(user.cards);
                 io.to(user.socketId).emit('cards', user.cards);
             })
@@ -148,7 +153,7 @@ export const setupWebSockets = (server :any) => {
         })
 
         socket.on('choose-card', (roomName: string, index: number, callback) => {
-          //get players by socketID
+
             let currentRoom = rooms.find(room => room.name === roomName);
             if (!currentRoom) {
                 return callback({
@@ -161,12 +166,44 @@ export const setupWebSockets = (server :any) => {
             if (!user) {
                 return callback({
                     success: false,
-                    message: Messages.USERNAME_ALREADY_TAKEN
+                    message: Messages.USER_NOT_FOUND
                 })
             }
 
-            io.to(roomName).emit('card-chosen', `${user.username} a choisi la carte ${user.cards[index].text}`);
+            let tv = currentRoom.users.find(user => user.role === UserRoles.TV)
+            if (tv) {
+                if (currentRoom.countAnswer()) {
+                    io.to(tv?.socketId).emit('tv', 'tt le monde a joue')
+                } else {
+                    io.to(tv?.socketId).emit('tv', 'ceci est la tele')
+                }
+            }
+        })
 
+        socket.on('leave-room', (roomName: string, callback) => {
+            let currentRoom = rooms.find(room => room.name === roomName);
+            if (!currentRoom) {
+                return callback({
+                    success: false,
+                    message: Messages.ROOM_NOT_FOUND
+                })
+            }
+
+            let user = currentRoom.users.find(user => user.socketId === socket.id);
+            if (!user) {
+                return callback({
+                    success: false,
+                    message: Messages.USER_NOT_FOUND
+                })
+            }
+
+            currentRoom.RemoveUser(user);
+
+            io.to(roomName).emit('room-update', currentRoom);
+            callback({
+                success: true,
+                message: Messages.ROOM_LEFT
+            })
         })
     });
 

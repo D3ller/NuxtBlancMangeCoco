@@ -24,7 +24,7 @@ app.get('/room', (req, res) => {
 export let white_cards: [] = [];
 export let blue_cards: [] = [];
 
-mongoose.connect('mongodb://sae501:aeibbsqGaHDpzgA@emilienrozier.fr:8080/sae501')
+mongoose.connect(process.env.MONGO_URI)
     .then(async () => {
         console.log('Connecté!');
 

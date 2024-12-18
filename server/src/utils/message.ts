@@ -7,5 +7,7 @@ export const Messages = {
     USERNAME_ALREADY_TAKEN: "Ce nom d'utilisateur est déjà pris.",
     NOT_LEADER: "Vous n'êtes pas le leader de la salle.",
     ROOM_TOO_SMALL: "La salle doit contenir au moins 3 joueurs pour démarrer.",
-    ALREADY_STARTED: "La partie a déjà commencé."
+    ALREADY_STARTED: "La partie a déjà commencé.",
+    USER_NOT_FOUND: "L'utilisateur n'existe pas",
+    ROOM_LEFT: "Vous avez quitté la salle avec succès.",
 }

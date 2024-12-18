@@ -15,4 +15,8 @@ socket.on('connect', () => {
 socket.on('id', (e) => {
   console.log(e)
 })
+
+const colorMode = useColorMode()
+
+console.log(colorMode.preference)
 </script>

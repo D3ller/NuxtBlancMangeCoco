@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     cookieRememberMeExpires: process.env.COOKIE_REMEMBER_ME_EXPIRES,
     googleClientId: process.env.GOOGLE_CLIENT_ID,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    socketUrl: process.env.SOCKET_URL,
   },
   mongoose: {
     uri: process.env.MONGO_URI,
@@ -28,26 +29,14 @@ export default defineNuxtConfig({
 
     families: [
       {
-        name: 'Satoshi',
-        src: '/fonts/Satoshi-Variable.woff2',
-      },
-      {
-        name: 'Satoshi',
-        src: '/fonts/Satoshi-Variable.ttf',
-      },
-      {
-        name: 'Satoshi',
-        src: '/fonts/Satoshi-Variable.woff',
-      },
-      {
-        name: 'Satoshi',
-        src: '/fonts/Satoshi-Variable.eot',
+        name: 'MAutotune',
+        src: '/fonts/Saans-Medium.woff2'
       }
     ],
     fallbacks: {
       'serif': ['Times New Roman'],
-      'sans-serif': ['Arial'],
+      'sans-serif': ['MAutotune'],
     },
   },
-  modules: ['@nuxt/fonts', '@nuxt/image', 'nuxt-mongoose'],
+  modules: ['@nuxt/fonts', '@nuxt/image', 'nuxt-mongoose', '@nuxtjs/color-mode'],
 })

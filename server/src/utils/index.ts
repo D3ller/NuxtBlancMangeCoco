@@ -12,6 +12,7 @@ export class User {
     role: string;
     socketId: string;
     cards: string[] = [];
+    hand: any | null = null;
     win: number = 0;
 
     constructor(username: string, id: number, role: string = UserRoles.USER, socketId: string) {
@@ -20,6 +21,12 @@ export class User {
         this.role = role;
         this.socketId = socketId;
 
+    }
+
+    public setHandCard(index: number) {
+        this.hand = this.cards[index];
+        console.log(this.hand);
+        return this.hand;
     }
 }
 
@@ -87,7 +94,6 @@ export class Room {
     }
 
     public distributeCards() {
-        console.log(this.wCards.length);
         let playerCount = this.users.length;
 
         for (let i = 0; i < playerCount; i++) {
@@ -100,7 +106,6 @@ export class Room {
             if(player.role === UserRoles.LEADER) {
                 let randomBlueCards = Math.floor(Math.random() * this.bCards.length);
                 this.currentCard = this.bCards[randomBlueCards];
-                console.log(this.currentCard)
                 this.bCards.splice(randomBlueCards, 1);
             }
 
@@ -113,11 +118,9 @@ export class Room {
             player.cards = playerCards;
         }
 
-        console.log(this.wCards.length);
     }
 
     public countAnswer() : boolean {
-        console.log(this.currentAnswer, this.users.length)
         if(this.currentAnswer === this.users.length-1) {
             this.currentAnswer = 0;
             return true

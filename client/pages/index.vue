@@ -5,6 +5,10 @@ import Piment from "~/components/global/section/piment.vue";
 import FAQ from "~/components/global/section/FAQ.vue";
 import Button from "~/components/global/button.vue";
 
+useSeoMeta({
+  title: "Banana Split — Jeu de cartes inspiré de Blanc Manger Coco",
+})
+
 const router = useRouter()
 
 let text = ref('')
@@ -33,13 +37,22 @@ socket.on('error', (err) => {
     <header-banner></header-banner>
     <piment></piment>
     <f-a-q></f-a-q>
+<section class="join-party">
+  <div class="container">
+      <h2>Rejoindre une partie?</h2>
+      <div class="max-party">
+      <input placeholder="Code d'invitation" v-model="text">
+      <input v-model="username" placeholder="Votre pseudo">
+      <Button style="cursor: pointer" @click="joinRoom(username, text)">Rejoindre</Button>
+      </div>
+  </div>
+</section>
+
 
   </div>
 
 
-  <input placeholder="code" v-model="text">
-  <input v-model="username" placeholder="username">
-  <Button @click="joinRoom(username, text)">Join room</Button>
+
 </template>
 
 <style scoped>

@@ -13,6 +13,7 @@ let props = defineProps({
 
 <template>
 <div class="about_card">
+  <NuxtImg src="https://via.placeholder.com/150" alt="card" />
   <h3>{{title}}</h3>
   <p>{{text}}</p>
 </div>

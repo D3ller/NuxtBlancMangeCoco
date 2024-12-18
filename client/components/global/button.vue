@@ -5,7 +5,7 @@ let props = defineProps({
     required: false,
     default: "default",
     validator(value, props) {
-      return ['default', 'link', 'light', 'dark'].includes(value)
+      return ['default', 'link', 'dark'].includes(value)
     }
   },
   href: {

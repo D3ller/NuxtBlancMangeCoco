@@ -25,11 +25,16 @@ export const setupWebSockets = (server: any) => {
                     message: Messages.ROOM_NOT_FOUND
                 })
             }
+
+            let players = currentRoom.users.find((b) => b.socketId === socket.id);
+
             callback({
                 success: true,
-                players: currentRoom.getRoom()
+                players: currentRoom.getRoom(),
+                currentPlayers: players
             })
         })
+    
 
         socket.on('create-server', (roomName: string, callback) => {
             if (Room.isRoomExist(roomName)) {
@@ -108,7 +113,6 @@ export const setupWebSockets = (server: any) => {
                 })
             }
             const leader = currentRoom.users.find(user => user.role === UserRoles.LEADER);
-            console.log(socket.id);
             if (!leader || leader.socketId !== socket.id) {
                 return callback({
                     success: false,
@@ -137,12 +141,10 @@ export const setupWebSockets = (server: any) => {
 
             currentRoom.users.forEach(user => {
                 if (user.role === UserRoles.TV) {
-                    console.log(currentRoom.currentCard);
                     io.to(user.socketId).emit('blue-card', currentRoom.currentCard);
                     return
                 }
-                //if (user.role === UserRoles.LEADER) return;
-                console.log(user.cards);
+                if (user.role === UserRoles.LEADER) return;
                 io.to(user.socketId).emit('cards', user.cards);
             })
 
@@ -152,7 +154,7 @@ export const setupWebSockets = (server: any) => {
             })
         })
 
-        socket.on('choose-card', (roomName: string, index: number, callback) => {
+        socket.on('choose-card', async (roomName: string, index: number, callback) => {
 
             let currentRoom = rooms.find(room => room.name === roomName);
             if (!currentRoom) {
@@ -170,13 +172,47 @@ export const setupWebSockets = (server: any) => {
                 })
             }
 
+            user.setHandCard(index);
+
             let tv = currentRoom.users.find(user => user.role === UserRoles.TV)
-            if (tv) {
+            let leader = currentRoom.users.find((u) => u.role === UserRoles.LEADER);
+            if (tv && leader) {
                 if (currentRoom.countAnswer()) {
                     io.to(tv?.socketId).emit('tv', 'tt le monde a joue')
+
+                    let white_cards :string[] = []
+
+                    currentRoom.users.forEach(async (e) => {
+                        if(e.role === UserRoles.TV) {
+                            return;
+                        }
+                        e.cards[index] = { ...e.cards[index], socketId: e.socketId };
+                        white_cards.push(e.cards[index])
+                    })
+                
+                    io.to(tv?.socketId).emit('white_cards', white_cards);
+
+                    console.log(leader)
+                    io.to(leader?.socketId).emit("final-choice", white_cards);
+                    
                 } else {
                     io.to(tv?.socketId).emit('tv', 'ceci est la tele')
                 }
+            }
+        })
+
+        socket.on('cardPosition', (index: number, roomName: string, callback) => {
+            let currentRoom = rooms.find(room => room.name === roomName);
+            if (!currentRoom) {
+                return callback({
+                    success: false,
+                    message: Messages.ROOM_NOT_FOUND
+                })
+            }
+            
+            let tv = currentRoom.users.find((b) => b.role === UserRoles.TV);
+            if(tv) {
+                io.to(tv.socketId).emit('updateCardPosition', index);
             }
         })
 

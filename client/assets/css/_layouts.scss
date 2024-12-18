@@ -2,8 +2,8 @@
 @import "functions";
 
 .navbar {
-  color: white;
-  padding: rem(10) rem(14);
+  padding: 2.75rem rem(14);
+
   .navbar-flex {
     display: flex;
     justify-content: space-between;
@@ -12,7 +12,15 @@
 
   .navbar-button {
     display: flex;
+    align-items: center;
     gap: rem(16);
+    max-height: 48px;
+  }
+}
+
+.dark-mode {
+  .navbar {
+    color:white;
   }
 }
 

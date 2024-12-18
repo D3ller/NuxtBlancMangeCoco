@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import AboutCard from "~/components/global/card/aboutCard.vue";
 
-let card: { title: string, text: string } = [{
-  title: "Crée vos propres cartes",
-  text: "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. \n" +
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris.  "
-}, {
-  title: "Ajouter des sets de carte",
-  text: "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. \n" +
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris.  "
-}]
+let card: { title: string, text: string }[] = [
+  {
+    title: "Jouer avec vos amis",
+    text: "Rassemblez vos amis et plongez dans des parties endiablées. Préparez-vous à rire, à débattre et à créer des souvenirs mémorables !"
+  },
+  {
+    title: "Créez vos propres sets",
+    text: "Laissez libre cours à votre imagination en concevant des sets de cartes personnalisés. Rendez vos parties uniques et adaptées à votre style !"
+  },
+  {
+    title: "Ajouter des sets de cartes",
+    text: "Enrichissez vos parties en ajoutant de nouveaux sets de cartes. Découvrez des thèmes variés pour des heures de jeu inédites."
+  }
+];
 </script>
 
 <template>
@@ -26,7 +31,7 @@ let card: { title: string, text: string } = [{
     </div>
 
     <div class="flex">
-      <Button href="/set" variant="dark">Découvrir nos sets</Button>
+      <Button href="/set">Découvrir nos sets</Button>
     </div>
 
 

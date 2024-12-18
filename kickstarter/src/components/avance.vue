@@ -2,7 +2,7 @@
 import Progressbar from "@/components/item/progressbar.vue";
 import {ref} from 'vue'
 
-let progress = ref(40)
+let progress = ref(15)
 </script>
 
 <template>

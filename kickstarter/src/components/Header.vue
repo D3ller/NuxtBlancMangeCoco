@@ -52,4 +52,44 @@ h3 {
     font-size: 32px;
     color: var(--gray-color);
 }
+
+@media only screen and (max-width: 768px) {
+    header {
+        background-size: cover; /* Ensure the image covers the header fully */
+        height: 50vh; /* Adjust height for smaller screens */
+        margin-bottom: 40px;
+        width: 100%;
+    }
+
+    .header_content-wrapper {
+        position: absolute;
+        bottom: 0;
+        margin: 0 20px; /* Reduce margins for smaller screens */
+        padding-bottom: 20px; /* Adjust padding */
+    }
+
+    h1 {
+        font-size: 36px; /* Reduce the title size */
+        line-height: 1.2;
+    }
+
+    h3 {
+        font-size: 18px; /* Adjust subtitle size */
+    }
+
+    .header-location {
+        margin-top: 10px;
+        font-size: 14px; /* Adjust text size for smaller screens */
+    }
+
+    .header-location > p {
+        margin-left: 3px;
+    }
+
+    svg {
+        width: 18px; /* Scale down SVG size */
+        height: 20px;
+    }
+}
+
 </style>

@@ -70,4 +70,5 @@ let scrollInside = (e : any) => {
   text-transform: uppercase;
 }
 
+
 </style>

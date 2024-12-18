@@ -1,0 +1,435 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v5.0.2 | 20191019
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+main, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, menu, nav, section {
+  display: block;
+}
+
+/* HTML5 hidden-attribute fix for newer browsers */
+*[hidden] {
+  display: none;
+}
+
+body {
+  line-height: 1;
+}
+
+menu, ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.button-default {
+  border: 0;
+  padding: 0.875rem;
+  box-shadow: 0px 4px 4px 0px rgba(255, 255, 255, 0.25) inset;
+  background: #0040FF;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  color: white;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  transition: 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.button-default:hover {
+  background: #0139DF;
+}
+.button-default:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.button-link {
+  border: 0;
+  padding: 0.875rem;
+  background: transparent;
+  font-weight: 700;
+  color: #fff;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  transition: 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.button-link:hover {
+  color: #e6e6e6;
+  text-decoration: underline;
+}
+.button-light {
+  border: 0;
+  padding: 0.875rem;
+  box-shadow: 0px 4px 4px 0px rgba(85, 85, 85, 0.25) inset;
+  background: #fff;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  color: #141414;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  transition: 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.button-light:hover {
+  background: #e6e6e6;
+}
+.button-dark {
+  border: 0;
+  padding: 0.875rem;
+  box-shadow: 0px 4px 4px 0px rgba(156, 156, 156, 0.25) inset;
+  background: #141414;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: "Satoshi", sans-serif;
+  font-size: 16px;
+  transition: 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.button-dark:hover {
+  background: black;
+}
+
+.game-cards {
+  background: #0040FF;
+  font-family: "Satoshi", sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  width: 255px;
+  height: 353px;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  color: #fff;
+  line-height: 160%;
+}
+.game-cards-word {
+  background: #fff;
+  color: #141414;
+  font-family: "Satoshi", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  width: 255px;
+  height: 353px;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  line-height: 160%;
+}
+
+.about_card {
+  padding: 2rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+}
+@media screen and (max-width: 48em) {
+  .about_card {
+    padding: 1.5rem;
+  }
+}
+.about_card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+@media screen and (max-width: 48em) {
+  .about_card h3 {
+    font-size: 1.25rem;
+  }
+}
+.about_card p {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #B8B8B8;
+}
+@media screen and (max-width: 48em) {
+  .about_card p {
+    font-size: 0.875rem;
+  }
+}
+
+.faq-item {
+  cursor: pointer;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 0.5rem;
+  transition: 0.3s;
+}
+.faq-item.extended .title {
+  margin-bottom: 1rem;
+}
+.faq-item .title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.navbar {
+  color: white;
+  padding: 0.625rem 0.875rem;
+}
+.navbar .navbar-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar .navbar-button {
+  display: flex;
+  gap: 1rem;
+}
+
+footer {
+  background: #0040FF;
+  padding: 5rem 0;
+}
+@media screen and (max-width: 62em) {
+  footer {
+    padding: 2.5rem 0;
+  }
+}
+footer .footer-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+@media screen and (max-width: 62em) {
+  footer .footer-flex {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+}
+footer .footer-flex .flex {
+  display: flex;
+  gap: 5rem;
+}
+@media screen and (max-width: 62em) {
+  footer .footer-flex .flex {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+}
+footer .footer-flex .footer-content {
+  grid-column: span 4/span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: white;
+}
+footer .footer-flex .footer-content .title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+footer .footer-flex .footer-content .sub-link {
+  display: flex;
+  flex-direction: column;
+}
+footer .footer-flex .footer-content .sub-link > * {
+  margin-top: 0.75rem;
+  text-decoration: none;
+  color: white;
+}
+footer .footer-flex .footer-content .sub-link > *:hover {
+  text-decoration: underline;
+}
+
+body {
+  font-family: "Satoshi", sans-serif;
+  background: #141414;
+}
+body #page_home .noise {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+body #page_home .noise .grid_cols {
+  grid-column: span 6/span 6;
+}
+@media screen and (max-width: 62em) {
+  body #page_home .noise .grid_cols:first-child {
+    grid-column: span 12/span 12 !important;
+  }
+}
+@media screen and (max-width: 62em) {
+  body #page_home .noise .grid_cols:last-child {
+    display: none;
+  }
+}
+body #page_home .noise .hB-title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
+  font-size: 3.75rem;
+}
+@media screen and (max-width: 48em) {
+  body #page_home .noise .hB-title {
+    font-size: 2.25rem;
+  }
+}
+body #page_home .noise .hB-description {
+  color: #B8B8B8;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+@media screen and (max-width: 62em) {
+  body #page_home .noise .hB-description {
+    margin-bottom: 2rem;
+  }
+}
+body #page_home .noise .cardSection {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+body #page_home .noise .cardSection > * {
+  top: -50px;
+}
+body #page_home .noise .cardSection > *:first-child {
+  position: absolute;
+  left: 35%;
+  transform: translateX(-50%) rotate(-18deg);
+  z-index: 10;
+}
+body #page_home .noise .cardSection > *:last-child {
+  position: absolute;
+  right: 40%;
+  transform: translateX(50%) rotate(18deg);
+}
+body #page_home .piment {
+  background: white;
+  padding: 5rem 0;
+}
+@media screen and (max-width: 62em) {
+  body #page_home .piment {
+    padding: 2.5rem 0;
+  }
+}
+body #page_home .piment h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #141414;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+@media screen and (max-width: 48em) {
+  body #page_home .piment h2 {
+    font-size: 1.625rem;
+    margin-bottom: 2rem;
+  }
+}
+body #page_home .piment .grid {
+  gap: 1rem;
+  margin-bottom: 4rem;
+}
+body #page_home .piment .grid .grid_cols {
+  grid-column: span 6/span 6;
+}
+@media screen and (max-width: 62em) {
+  body #page_home .piment .grid .grid_cols {
+    grid-column: span 12/span 12;
+  }
+}
+body #page_home .piment .flex {
+  display: flex;
+  justify-content: center;
+}
+body #page_home .faq {
+  padding: 80px 0;
+}
+@media screen and (max-width: 62em) {
+  body #page_home .faq {
+    padding: 2.5rem 0;
+  }
+}
+body #page_home .faq h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+@media screen and (max-width: 48em) {
+  body #page_home .faq h2 {
+    font-size: 1.625rem;
+    margin-bottom: 2rem;
+  }
+}
+body #page_home .faq .faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 16px;
+  max-width: 100%;
+}
+@media (min-width: 36em) {
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 48em) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 62em) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 75em) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/*# sourceMappingURL=index.css.map */

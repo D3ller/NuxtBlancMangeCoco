@@ -3,36 +3,31 @@
     <header class="header">
       <nav>
         <ul>
-          <li :class="{ active: activeSection === 'campagne' }">
-            <a href="#campagne" @click="setActiveSection('campagne')"
-              >Campagne</a
-            >
+          <li :class="{ active: isActive('/') }">
+            <router-link to="/" @click="setActiveSection('campagne')">Campagne</router-link>
           </li>
-          <li :class="{ active: activeSection === 'actu' }">
-            <a href="#actu" @click="setActiveSection('actu')">Actus</a>
+          <li :class="{ active: isActive('/actus') }">
+            <router-link to="/actus" @click="setActiveSection('actu')">Actus</router-link>
           </li>
         </ul>
       </nav>
     </header>
-
-    <!-- <main class="content">
-      <section id="campagne" v-if="activeSection === 'campagne'">
-        
-      
-      </section>
-      <section id="actu" v-if="activeSection === 'actu'">
-        
-      </section>
-    </main> -->
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useRoute } from 'vue-router';
+
 let activeSection = ref("campagne");
+const route = useRoute();
 
 let setActiveSection = (section) => {
   activeSection.value = section;
+};
+
+let isActive = (path) => {
+  return route.path === path;
 };
 </script>
 
@@ -43,7 +38,7 @@ let setActiveSection = (section) => {
 
 nav {
   margin-top: 20px;
-  display : flex;
+  display: flex;
   justify-content: center;
 }
 
@@ -68,6 +63,10 @@ li a {
   position: relative;
   transition: color 0.3s ease;
   font-size: 20px;
+}
+
+li.active a {
+  color: white; /* Change the text color to white when active */
 }
 
 li a::after {

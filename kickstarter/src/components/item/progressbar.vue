@@ -26,4 +26,16 @@ let props = defineProps<{
   border-radius: 5000px;
   height: 100%;
 }
+
+@media only screen and (max-width: 768px) {
+    .progress-bar {
+        height: 15px; /* Adjust height for smaller screens */
+        padding: 1px; /* Reduce padding */
+    }
+
+    .progress-fill {
+        height: 100%; /* Ensure the fill adjusts to the new bar height */
+    }
+}
+
 </style>

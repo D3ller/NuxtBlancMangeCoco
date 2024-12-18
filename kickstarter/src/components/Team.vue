@@ -75,4 +75,46 @@ img {
 span {
     text-transform: uppercase;
 }
+
+@media only screen and (max-width: 768px) {
+    .section {
+        padding-bottom: 50px; /* Adjust padding for smaller screens */
+    }
+
+    h2 {
+        font-size: 28px; /* Scale down the title size */
+        margin-bottom: 20px; /* Adjust margin for spacing */
+    }
+
+    ul {
+        flex-direction: row; /* Arrange items horizontally */
+        flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+        justify-content: center; /* Center items horizontally */
+        gap: 15px; /* Add spacing between items */
+        margin: 0; /* Remove side margins */
+    }
+
+    li {
+        margin: 0; /* Remove horizontal margins */
+        width: 45%; /* Reduce size of each list item */
+        display: flex; /* Ensure horizontal alignment */
+        align-items: center;
+        gap: 10px; /* Add spacing between image and text */
+    }
+
+    img {
+        width: 60px; /* Smaller image size */
+        height: 60px; /* Maintain square aspect ratio */
+        border-radius: 50%; /* Make images circular */
+    }
+
+    h3 {
+        font-size: 16px; /* Reduce font size */
+    }
+
+    span {
+        font-size: 14px; /* Scale down the text inside <span> */
+    }
+}
+
 </style>

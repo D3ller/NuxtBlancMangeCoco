@@ -55,4 +55,36 @@ let progress = ref(33)
 .bigger {
   font-size: 26px;
 }
+
+@media only screen and (max-width: 768px) {
+    .avance-grid {
+        display: flex;
+        flex-direction: column; /* Stack items vertically */
+        gap: 40px; /* Reduce gap between items */
+        margin: 50px 0; /* Adjust margins for smaller screens */
+        padding: 15px;
+    }
+
+    .avance-item {
+        grid-column: span 12 / span 12; /* Ensure full width */
+    }
+
+    .avance-item.first {
+        gap: 15px; /* Reduce gap within the first item */
+    }
+
+    .avance-text-container {
+        flex-direction: column; /* Stack text vertically */
+        align-items: flex-start; /* Align text to the left */
+    }
+
+    .avance-text {
+        font-size: 16px; /* Adjust font size for smaller screens */
+    }
+
+    .bigger {
+        font-size: 20px; /* Scale down the larger text */
+    }
+}
+
 </style>

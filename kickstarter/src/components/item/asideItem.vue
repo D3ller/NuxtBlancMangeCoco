@@ -24,6 +24,6 @@ const props = withDefaults(defineProps<{ title: string; active: boolean }>(), {
   color: white !important;
   border-color: var(--theme-color);
   font-weight: 600;
-  font-size: 20px;
+  font-size: 15px;
 }
 </style>

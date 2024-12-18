@@ -62,7 +62,7 @@ li a {
   padding: 10px;
   position: relative;
   transition: color 0.3s ease;
-  font-size: 20px;
+ font-size: 20px;
 }
 
 li.active a {

@@ -56,18 +56,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      activeSection: "campagne",
-    };
-  },
-  methods: {
-    setActiveSection(section) {
-      this.activeSection = section;
-    },
-  },
+<script setup>
+import { ref } from "vue";
+let activeSection = ref("campagne");
+
+let setActiveSection = (section) => {
+  activeSection.value = section;
 };
 </script>
 

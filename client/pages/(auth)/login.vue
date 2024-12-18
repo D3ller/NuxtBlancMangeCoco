@@ -5,29 +5,18 @@
       <form @submit.prevent="submitLogin">
         <div class="form-group">
           <label for="email">Email</label>
-          <input
-              type="email"
-              id="email"
-              v-model="email"
-              required
-              placeholder="Entrez votre email"
-          />
+          <input type="email" id="email" v-model="loginCred.email" required placeholder="Entrez votre email" />
         </div>
 
         <div class="form-group">
           <label for="password">Mot de passe</label>
-          <input
-              type="password"
-              id="password"
-              v-model="password"
-              required
-              placeholder="Entrez votre mot de passe"
-          />
+          <input type="password" id="password" v-model="loginCred.password" required
+            placeholder="Entrez votre mot de passe" />
         </div>
 
         <button type="submit">Se connecter</button>
 
-        <p v-if="error" class="error-message">{{ error }}</p>
+        <p v-if="login.error" class="error-message">{{ login.error }}</p>
 
         <!-- Boutons sociaux -->
         <div class="social">
@@ -52,28 +41,39 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      error: ''
-    };
-  },
-  methods: {
-    submitLogin() {
-      if (this.email === '' || this.password === '') {
-        this.error = "Veuillez remplir tous les champs.";
-      } else {
-        this.error = '';
-        console.log("Email:", this.email, "Password:", this.password);
-      }
-    },
-    loginWith(provider) {
-      console.log("Login avec", provider);
-      // Ajoutez ici la logique de connexion via les services sociaux.
-    }
+<script setup>
+const router = useRouter()
+
+const { login } = useAuth()
+
+let loginCred = reactive({
+  email: '',
+  password: '',
+  error: ''
+})
+
+let submitLogin = async () => {
+  if (loginCred.email === '' || loginCred.password === '') {
+    loginCred.error = "Veuillez remplir tous les champs.";
+  }
+
+  await login(loginCred.email, loginCred.password, 'default')
+
+};
+
+let loginWith = (provider) => {
+  switch (provider) {
+    case 'discord':
+      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1309087675571245138&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord%2Fcallback&scope=email+identify';
+      break;
+    case 'google':
+      window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=1017411917158-mrmhfb3bpnmcdn35rkhfsknsd7osnsl7.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google/callback&response_type=token&scope=openid%20profile%20email&prompt=consent';
+      break;
+    case 'webmail':
+      console.log('Connexion avec Webmail');
+      break;
+    default:
+      console.error('Erreur lors de la connexion');
   }
 };
 </script>
@@ -155,14 +155,16 @@ button:hover {
 
 @media screen and (max-width: 768px) {
   .inscrit {
-    margin: 5px 0; /* Ajuster la marge pour les petits écrans */
+    margin: 5px 0;
+    /* Ajuster la marge pour les petits écrans */
   }
 }
 
 /* Styles responsifs pour des écrans encore plus petits (mobiles) */
 @media screen and (max-width: 480px) {
   .inscrit {
-    margin: 5px 0; /* Ajuster encore la marge pour les très petits écrans */
+    margin: 5px 0;
+    /* Ajuster encore la marge pour les très petits écrans */
   }
 }
 
@@ -189,12 +191,16 @@ button:hover {
   font-size: 20px;
   color: white;
 }
+
 .social-btn img {
-  width: 34px; /* Taille de l'image */
+  width: 34px;
+  /* Taille de l'image */
   height: 24px;
-  display: block; /* Pour centrer l'image */
+  display: block;
+  /* Pour centrer l'image */
   object-fit: contain;
 }
+
 .discord {
   background-color: #5F6FBE;
 }

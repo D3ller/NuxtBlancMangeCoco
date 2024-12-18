@@ -17,7 +17,7 @@ import GameCard from "~/components/global/card/gameCard.vue";
       </div>
       <div class="grid_cols">
         <div class="cardSection">
-          <GameCard text="Faire pipi dans la piscine et accuser un enfant."></GameCard>
+          <GameCard text="Faire pipi dans la piscine et accuser un enfant." variant=""></GameCard>
           <GameCard text="Le secret pour vivre jusqu’à 100 ans, c’est __________." variant="word"></GameCard>
         </div>
       </div>

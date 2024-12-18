@@ -119,6 +119,7 @@ export class Room {
     public countAnswer() : boolean {
         console.log(this.currentAnswer, this.users.length)
         if(this.currentAnswer === this.users.length-1) {
+            this.currentAnswer = 0;
             return true
         }
         this.currentAnswer++;

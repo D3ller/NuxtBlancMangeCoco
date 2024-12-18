@@ -1,6 +1,6 @@
-import {Server} from "socket.io";
-import {addRoom, Room, rooms, RoomStatus, User, UserRoles} from "./utils";
-import {Messages} from "./utils/message.ts";
+import { Server } from "socket.io";
+import { addRoom, Room, rooms, RoomStatus, User, UserRoles } from "./utils";
+import { Messages } from "./utils/message.ts";
 
 export const setupWebSockets = (server: any) => {
     const io = new Server(server, {
@@ -172,7 +172,7 @@ export const setupWebSockets = (server: any) => {
 
             let tv = currentRoom.users.find(user => user.role === UserRoles.TV)
             if (tv) {
-                if(currentRoom.countAnswer()) {
+                if (currentRoom.countAnswer()) {
                     io.to(tv?.socketId).emit('tv', 'tt le monde a joue')
                 } else {
                     io.to(tv?.socketId).emit('tv', 'ceci est la tele')

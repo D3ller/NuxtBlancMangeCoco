@@ -1,6 +1,6 @@
-import { Server } from "socket.io";
-import { addRoom, Room, rooms, RoomStatus, User, UserRoles } from "./utils";
-import { Messages } from "./utils/message.ts";
+import {Server} from "socket.io";
+import {addRoom, getRoomAvaible, Room, rooms, RoomStatus, User, UserRoles} from "./utils";
+import {Messages} from "./utils/message.ts";
 import bannedWords from './utils/bannedWord.json';
 
 export const setupWebSockets = (server: any) => {
@@ -11,7 +11,6 @@ export const setupWebSockets = (server: any) => {
     });
 
     io.on("connection", (socket) => {
-        console.log(`Connecté: ${socket.id}`);
         socket.emit('id', socket.id);
 
         socket.on('disconnect', () => {
@@ -49,12 +48,33 @@ export const setupWebSockets = (server: any) => {
             const room: Room = new Room(roomName, Room.generateRoomId(), new User("TV", 1, UserRoles.TV, socket.id));
             addRoom(room);
             socket.join(roomName);
+            io.emit('rooms', getRoomAvaible());
             callback({
                 success: true,
                 message: Messages.ROOM_CREATED,
                 room: room
             })
 
+        })
+
+        socket.on('confirm-card', (socket: string, roomName: string, callback) => {
+            let currentRoom = rooms.find(room => room.name === roomName);
+            if (!currentRoom) {
+                return callback({
+                    success: false,
+                    message: Messages.ROOM_NOT_FOUND
+                })
+            }
+
+            let user = currentRoom.users.find(user => user.socketId === socket);
+            if (!user) {
+                return callback({
+                    success: false,
+                    message: Messages.USER_NOT_FOUND
+                })
+            }
+
+            console.log(user.hand);
         })
 
         socket.on('join-server', (roomName: string, username: string, callback) => {
@@ -100,6 +120,7 @@ export const setupWebSockets = (server: any) => {
             let user = new User(username, currentRoom.users.length + 1, role, socket.id);
             currentRoom.addUser(user);
             socket.join(roomName);
+            io.emit('rooms', getRoomAvaible());
             io.to(roomName).emit('room-update', currentRoom);
             callback({
                 success: true,
@@ -113,6 +134,7 @@ export const setupWebSockets = (server: any) => {
         socket.on('start-game', (roomName: string, callback) => {
 
             socket.emit('id', socket.id);
+
 
             let currentRoom = rooms.find(room => room.name === roomName);
             if (!currentRoom) {
@@ -145,6 +167,7 @@ export const setupWebSockets = (server: any) => {
             }
 
             currentRoom.status = RoomStatus.STARTED;
+            io.emit('rooms', getRoomAvaible());
             currentRoom.distributeCards();
             io.to(roomName).emit('game-started', currentRoom);
 
@@ -161,6 +184,10 @@ export const setupWebSockets = (server: any) => {
                 success: true,
                 message: "La partie a commencé."
             })
+        })
+
+        socket.on('get-rooms', (callback) => {
+            callback(getRoomAvaible());
         })
 
         socket.on('choose-card', async (roomName: string, index: number, callback) => {
@@ -192,7 +219,7 @@ export const setupWebSockets = (server: any) => {
                     let white_cards :string[] = []
 
                     currentRoom.users.forEach(async (e) => {
-                        if(e.role === UserRoles.TV) {
+                        if (e.role === UserRoles.TV || e.role === UserRoles.LEADER) {
                             return;
                         }
                         e.cards[index] = { ...e.cards[index], socketId: e.socketId };
@@ -201,7 +228,6 @@ export const setupWebSockets = (server: any) => {
                 
                     io.to(tv?.socketId).emit('white_cards', white_cards);
 
-                    console.log(leader)
                     io.to(leader?.socketId).emit("final-choice", white_cards);
                     
                 } else {

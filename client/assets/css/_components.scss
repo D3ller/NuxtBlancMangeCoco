@@ -15,3 +15,7 @@
 .faq-item {
   @include faqCard;
 }
+
+.roomCard {
+  @include RoomCard;
+}

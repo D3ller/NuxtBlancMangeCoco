@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 definePageMeta({
   layout: 'tv'
 })
@@ -17,16 +16,18 @@ let room = reactive({
 
 let randomName6 = Math.random().toString(36).substring(2, 8);
 
-socket.emit('create-server', randomName6, (e) => {
-  console.log(e)
-  room.code = e.room.name
-  room.qrCode = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${window.location.origin}/join?code=${e.room.name}`
-  room.loaded = true
+onMounted(() => {
+  socket.emit('create-server', randomName6, (e) => {
+    console.log(e)
+    room.code = e.room.name
+    room.qrCode = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${window.location.origin}/join?code=${e.room.name}`
+    room.loaded = true
     socket.emit('get-players', room.code, (e) => {
       if(e.players) {
         room.players.push(e.players.users[0])
       }
     })
+  })
 })
 
 socket.on('room-update', (e) => {
@@ -54,6 +55,10 @@ socket.on('tv', (e) => {
 socket.on('updateCardPosition', (e) => {
 room.cardPosition = e;
 })
+
+let copyCode = () => {
+  navigator.clipboard.writeText(room.code)
+}
 </script>
 
 <template>
@@ -61,10 +66,12 @@ room.cardPosition = e;
     <div id="tv_loaded" v-if="room.loaded">
 
       <nav class="nav">
-        <div class="nav-item">
-          Code de connexion:
-          <span>{{ room.code }}</span>
-        </div>
+        <ClientOnly>
+          <div class="nav-item" @click="copyCode">
+            Code de connexion:
+            <span>{{ room.code }}</span>
+          </div>
+        </ClientOnly>
         <div class="nav-item">
           <p>Nombre de joueurs:</p>
           <span>{{room.players.length}}</span>

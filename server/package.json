@@ -15,7 +15,9 @@
     "@types/express": "^5.0.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "https": "^1.0.0",
     "mongoose": "^8.9.0",
+    "os": "^0.1.2",
     "socket.io": "^4.8.1"
   }
 }

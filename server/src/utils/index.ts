@@ -25,7 +25,6 @@ export class User {
 
     public setHandCard(index: number) {
         this.hand = this.cards[index];
-        console.log(this.hand);
         return this.hand;
     }
 }
@@ -116,6 +115,7 @@ export class Room {
                 this.wCards.splice(randomIndex, 1);
             }
             player.cards = playerCards;
+            console.log(player.cards)
         }
 
     }
@@ -135,6 +135,15 @@ export const rooms: Room[] = [];
 
 export function addRoom(room: Room) {
     rooms.push(room);
+}
+
+export function getRoomAvaible() {
+    let avaibleRooms = rooms.filter(room => room.users.length < 10 && room.status === RoomStatus.WAITING);
+    let roomInfo: { name: string; id: number; users: number; status: string; }[] = [];
+    avaibleRooms.map(room => {
+        roomInfo.push({name: room.name, id: room.id, users: room.users.length-1, status: room.status})
+    })
+    return roomInfo;
 }
 
 export function getUserBySocketId(socketId: string): User | undefined {

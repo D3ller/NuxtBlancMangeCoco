@@ -25,6 +25,7 @@
     <div v-if="cRoom.started && cRoom.leader && cRoom.finalChoice.visible">
       <span @click="updateCardPosition('down')">fleche de gauche</span>
       <span @click="updateCardPosition('up')">fleche de droite</span>
+      <Button @click="Confirm()">Confirmer</Button>
     </div>
   </div>
 </template>
@@ -80,6 +81,13 @@ function start() {
       return
     }
     cRoom.started = true
+  })
+}
+
+let Confirm = () => {
+  console.log(cRoom.finalChoice.cards)
+  socket.emit('confirm-card', cRoom.finalChoice.cards[cRoom.finalChoice.cardPosition].socketId, roomName, (e) => {
+    console.log(e)
   })
 }
 

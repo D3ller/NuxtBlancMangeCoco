@@ -4,12 +4,14 @@ import cors from 'cors';
 import {setupWebSockets} from './websocket.ts';
 import {getUserBySocketId, rooms} from "./utils";
 import mongoose from "mongoose";
+import os from "os";
+
 
 const app = express();
 const server = createServer(app);
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '*',
 };
 app.use(cors(corsOptions));
 
@@ -46,12 +48,19 @@ mongoose.connect(process.env.MONGO_URI)
     })
     .catch(err => console.error('Erreur:', err));
 
-
-
+const networkInterfaces = os.networkInterfaces();
 
 setupWebSockets(server);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 6060;
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
+    for (const [name, interfaces] of Object.entries(networkInterfaces)) {
+        interfaces.forEach((iface) => {
+            if (!iface.internal) {
+                console.log(`- http://${iface.address}:${PORT}`);
+            }
+        });
+    }
 });
+

@@ -66,6 +66,8 @@ export const setupWebSockets = (server: any) => {
                 })
             }
 
+            console.log(socket)
+
             let user = currentRoom.users.find(user => user.socketId === socket);
             if (!user) {
                 return callback({
@@ -79,12 +81,14 @@ export const setupWebSockets = (server: any) => {
             currentRoom.users.forEach((e) => {
                 if (e.role != UserRoles.TV) {
                     e.role = UserRoles.USER;
+                    e.deleteCardFromDeck(0)
                 }
 
                 if (e.hand === user.hand) {
                     console.log('username gagnant: ', user.username);
                     user.win++;
                     console.log('user wins: ', user.win);
+                    io.to(user?.socketId).emit('win-turn')
                     user.role = UserRoles.LEADER;
                 }
                 // {
@@ -119,6 +123,13 @@ export const setupWebSockets = (server: any) => {
                     message: Messages.ROOM_NOT_FOUND
                 })
             }
+
+            let TV = currentRoom.users.find((e) => e.role === UserRoles.TV);
+            if (!TV) {
+                return
+            }
+            io.to(TV.socketId).emit("clear")
+
 
             currentRoom.distributeCards();
 
@@ -288,8 +299,8 @@ export const setupWebSockets = (server: any) => {
                         if (e.role === UserRoles.TV || e.role === UserRoles.LEADER) {
                             return;
                         }
-                        e.cards[index] = {...e.cards[index], socketId: e.socketId};
-                        white_cards.push(e.cards[index])
+                        e.cards[0] = {...e.cards[0], socketId: e.socketId};
+                        white_cards.push(e.cards[0])
                     })
 
                     io.to(tv?.socketId).emit('white_cards', white_cards);

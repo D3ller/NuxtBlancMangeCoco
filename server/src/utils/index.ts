@@ -25,9 +25,13 @@ export class User {
 
     public setHandCard(index: number) {
         this.hand = this.cards[index];
-        this.cards.splice(index, 1)
-        console.log(this.cards.length)
+        moveItem(this.cards, index, 0)
+        console.log(this.cards)
         return this.hand;
+    }
+
+    public deleteCardFromDeck(index: number) {
+        this.cards.splice(index, 1)
     }
 }
 
@@ -160,3 +164,13 @@ export function getUserBySocketId(socketId: string): User | undefined {
     }
 }
 
+function moveItem(array, fromIndex, toIndex) {
+    if (fromIndex < 0 || fromIndex >= array.length || toIndex < 0 || toIndex >= array.length) {
+        return array;
+    }
+
+    const [item] = array.splice(fromIndex, 1);
+    array.splice(toIndex, 0, item);
+
+    return array;
+}

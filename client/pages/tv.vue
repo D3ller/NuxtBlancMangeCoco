@@ -30,6 +30,10 @@ onMounted(() => {
   })
 })
 
+useSeoMeta({
+  title: "TV — Salle " + randomName6
+})
+
 socket.on('room-update', (e) => {
   console.log(e);
   if (e?.users) {
@@ -51,6 +55,10 @@ socket.on('white_cards', (e) => {
 socket.on('tv', (e) => {
   console.log(e)
 })
+
+socket.on('clear', () => (
+    room.wCards = []
+))
 
 socket.on('updateCardPosition', (e) => {
   room.cardPosition = e;

@@ -35,7 +35,7 @@ import socket from '../../utils/socket'
 import CardSelector from "~/components/global/card/cardSelector.vue";
 
 definePageMeta({
-  layout: 'room'
+  layout: 'room',
 })
 
 const router = useRouter()
@@ -56,6 +56,10 @@ let cRoom = reactive({
     cardPosition: 0,
     cards: []
   }
+})
+
+useSeoMeta({
+  title: "Banana Split — Salle " + roomName
 })
 
 let choosenCards = (index: number) => {

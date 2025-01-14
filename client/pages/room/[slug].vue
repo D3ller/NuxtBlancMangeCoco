@@ -11,7 +11,7 @@
       <h2 v-if="cRoom.waiting" class="waiting">En attente des autres joueurs et du choix du leader...</h2>
 
       <div v-if="cRoom.cards.cards.length > 0 && cRoom.started && cRoom.cards.visible">
-        <cardSelector class="selector" @chooseCard="choosenCards" :cards="cRoom.cards.cards"/>
+        <cardSelector class="selector" @chooseCard="choosenCards" :cards="cRoom.cards.cards" />
       </div>
     </div>
     <div class="roomButton">
@@ -76,7 +76,7 @@ function quit() {
 
 function start() {
   socket.emit('start-game', roomName, (e) => {
-    if(!e.success) {
+    if (!e.success) {
       console.log(e)
       return
     }
@@ -115,7 +115,7 @@ function updateCardPosition(param: string) {
 onMounted(() => {
   socket.emit('get-players', roomName, (e) => {
 
-    if(!e.success) {
+    if (!e.success) {
       console.log(e)
       return router.push('/')
     }
@@ -150,5 +150,21 @@ socket.on('room-update', (e) => {
 socket.on('final-choice', (e) => {
   cRoom.finalChoice.visible = true;
   cRoom.finalChoice.cards = e;
+})
+
+socket.on('turn', (e) => {
+  console.log(e)
+  if (e.currentPlayers && e.currentPlayers.role === "leader") {
+    cRoom.leader = true;
+  } else {
+    cRoom.leader = false;
+  }
+
+  cRoom.started = true
+  cRoom.waiting = false
+
+  socket.emit('next-turn', roomName, (e) => {
+    console.log(e)
+  })
 })
 </script>

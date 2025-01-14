@@ -75,6 +75,50 @@ export const setupWebSockets = (server: any) => {
             }
 
             console.log(user.hand);
+
+            currentRoom.users.forEach((e) => {
+                if (e.role != UserRoles.TV) {
+                    e.role = UserRoles.USER;
+                }
+                
+                if (e.hand === user.hand) {
+                    console.log('username gagnant: ', user.username);
+                    user.win++;
+                    console.log('user wins: ', user.win);
+                    user.role = UserRoles.LEADER;
+                }
+                // {
+                //     success: true,
+                //     players: currentRoom.getRoom(),
+                //     currentPlayers: e
+                // }
+            })
+
+            currentRoom.users.forEach((e) => {
+                io.to(e.socketId).emit("turn", {
+                    success: true,
+                    players: currentRoom.getRoom(),
+                    currentPlayers: e
+                })
+            })
+
+
+
+            // {
+            //     success: true,
+            //     players: currentRoom.getRoom(),
+            //     currentPlayers: players
+            // }
+        })
+
+        socket.on('next-turn', (roomName, cb) => {
+            let currentRoom = rooms.find(room => room.name === roomName);
+
+            currentRoom.distributeCards();
+
+            return cb({
+                currentRoom
+            })
         })
 
         socket.on('join-server', (roomName: string, username: string, callback) => {

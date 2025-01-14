@@ -3,7 +3,7 @@
     <div>
       <p class="title">Room: {{ roomName }}</p>
       <div v-if="cRoom.players.length > 0 && !cRoom.started" id="players">
-        <div class="player-item" v-for="p in cRoom.players">
+        <div v-for="p in cRoom.players" class="player-item">
           {{ p.username }}
         </div>
       </div>
@@ -11,7 +11,7 @@
       <h2 v-if="cRoom.waiting" class="waiting">En attente des autres joueurs et du choix du leader...</h2>
 
       <div v-if="cRoom.cards.cards.length > 0 && cRoom.started && cRoom.cards.visible">
-        <cardSelector class="selector" @chooseCard="choosenCards" :cards="cRoom.cards.cards" />
+        <cardSelector :cards="cRoom.cards.cards" class="selector" @chooseCard="choosenCards"/>
       </div>
     </div>
     <div class="roomButton">
@@ -162,6 +162,7 @@ socket.on('turn', (e) => {
 
   cRoom.started = true
   cRoom.waiting = false
+  cRoom.finalChoice.visible = false
 
   socket.emit('next-turn', roomName, (e) => {
     console.log(e)

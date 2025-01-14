@@ -80,7 +80,7 @@ export const setupWebSockets = (server: any) => {
                 if (e.role != UserRoles.TV) {
                     e.role = UserRoles.USER;
                 }
-                
+
                 if (e.hand === user.hand) {
                     console.log('username gagnant: ', user.username);
                     user.win++;
@@ -103,7 +103,6 @@ export const setupWebSockets = (server: any) => {
             })
 
 
-
             // {
             //     success: true,
             //     players: currentRoom.getRoom(),
@@ -114,7 +113,23 @@ export const setupWebSockets = (server: any) => {
         socket.on('next-turn', (roomName, cb) => {
             let currentRoom = rooms.find(room => room.name === roomName);
 
+            if (!currentRoom) {
+                return cb({
+                    success: false,
+                    message: Messages.ROOM_NOT_FOUND
+                })
+            }
+
             currentRoom.distributeCards();
+
+            currentRoom.users.forEach(user => {
+                if (user.role === UserRoles.TV) {
+                    io.to(user.socketId).emit('blue-card', currentRoom.currentCard);
+                    return
+                }
+                if (user.role === UserRoles.LEADER) return;
+                io.to(user.socketId).emit('cards', user.cards);
+            })
 
             return cb({
                 currentRoom
@@ -284,6 +299,8 @@ export const setupWebSockets = (server: any) => {
                 } else {
                     io.to(tv?.socketId).emit('tv', 'ceci est la tele')
                 }
+            } else {
+                console.log("nnaaaan")
             }
         })
 

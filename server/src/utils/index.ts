@@ -25,6 +25,8 @@ export class User {
 
     public setHandCard(index: number) {
         this.hand = this.cards[index];
+        this.cards.splice(index, 1)
+        console.log(this.cards.length)
         return this.hand;
     }
 }
@@ -50,7 +52,7 @@ export class Room {
     wCards = white_cards;
     bCards = blue_cards;
     currentCard: string[] = [];
-    currentAnswer : number = 1;
+    currentAnswer: number = 1;
 
     constructor(name: string, id: number, users?: User) {
         this.name = name;
@@ -102,27 +104,30 @@ export class Room {
                 continue;
             }
 
-            if(player.role === UserRoles.LEADER) {
+            if (player.role === UserRoles.LEADER) {
                 let randomBlueCards = Math.floor(Math.random() * this.bCards.length);
                 this.currentCard = this.bCards[randomBlueCards];
                 this.bCards.splice(randomBlueCards, 1);
             }
 
             let playerCards: string[] = [];
-            for (let j = 0; j < 11; j++) {
+            for (let j = 0; j < 11 - player.cards.length; j++) {
                 let randomIndex = Math.floor(Math.random() * this.wCards.length);
                 playerCards.push(this.wCards[randomIndex]);
                 this.wCards.splice(randomIndex, 1);
             }
-            player.cards = playerCards;
-            console.log(player.cards)
+            playerCards.forEach((e) => {
+                player.cards.push(e)
+            })
+
         }
 
     }
 
-    public countAnswer() : boolean {
-        if(this.currentAnswer === this.users.length-2) {
-            this.currentAnswer = 0;
+    public countAnswer(): boolean {
+        console.log(this.currentAnswer, this.users.length)
+        if (this.currentAnswer === this.users.length - 2) {
+            this.currentAnswer = 1;
             return true
         }
         this.currentAnswer++;
@@ -141,7 +146,7 @@ export function getRoomAvaible() {
     let avaibleRooms = rooms.filter(room => room.users.length < 10 && room.status === RoomStatus.WAITING);
     let roomInfo: { name: string; id: number; users: number; status: string; }[] = [];
     avaibleRooms.map(room => {
-        roomInfo.push({name: room.name, id: room.id, users: room.users.length-1, status: room.status})
+        roomInfo.push({name: room.name, id: room.id, users: room.users.length - 1, status: room.status})
     })
     return roomInfo;
 }

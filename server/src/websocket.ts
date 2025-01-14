@@ -34,7 +34,7 @@ export const setupWebSockets = (server: any) => {
                 currentPlayers: players
             })
         })
-    
+
 
         socket.on('create-server', (roomName: string, callback) => {
             if (Room.isRoomExist(roomName)) {
@@ -106,6 +106,13 @@ export const setupWebSockets = (server: any) => {
                 return callback({
                     success: false,
                     message: Messages.USERNAME_BANNED
+                })
+            }
+
+            if (username.length < 3 || username.length > 10) {
+                return callback({
+                    success: false,
+                    message: Messages.USERNAME_TOO
                 })
             }
 
@@ -216,20 +223,20 @@ export const setupWebSockets = (server: any) => {
                 if (currentRoom.countAnswer()) {
                     io.to(tv?.socketId).emit('tv', 'tt le monde a joue')
 
-                    let white_cards :string[] = []
+                    let white_cards: string[] = []
 
                     currentRoom.users.forEach(async (e) => {
                         if (e.role === UserRoles.TV || e.role === UserRoles.LEADER) {
                             return;
                         }
-                        e.cards[index] = { ...e.cards[index], socketId: e.socketId };
+                        e.cards[index] = {...e.cards[index], socketId: e.socketId};
                         white_cards.push(e.cards[index])
                     })
-                
+
                     io.to(tv?.socketId).emit('white_cards', white_cards);
 
                     io.to(leader?.socketId).emit("final-choice", white_cards);
-                    
+
                 } else {
                     io.to(tv?.socketId).emit('tv', 'ceci est la tele')
                 }
@@ -244,9 +251,9 @@ export const setupWebSockets = (server: any) => {
                     message: Messages.ROOM_NOT_FOUND
                 })
             }
-            
+
             let tv = currentRoom.users.find((b) => b.role === UserRoles.TV);
-            if(tv) {
+            if (tv) {
                 io.to(tv.socketId).emit('updateCardPosition', index);
             }
         })

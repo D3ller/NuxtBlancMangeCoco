@@ -10,5 +10,6 @@ export const Messages = {
     ALREADY_STARTED: "La partie a déjà commencé.",
     USER_NOT_FOUND: "L'utilisateur n'existe pas",
     ROOM_LEFT: "Vous avez quitté la salle avec succès.",
-    USERNAME_BANNED: "Ce nom d'utilisateur est interdit."
+    USERNAME_BANNED: "Ce nom d'utilisateur est interdit.",
+    USERNAME_TOO: "Votre nom d'utilisateur doit être compris entre 3 et 10 caractères"
 }

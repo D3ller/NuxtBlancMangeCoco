@@ -10,6 +10,7 @@ let room = reactive({
   started: false,
   players: [],
   bCard: "",
+  bCardVisible: true,
   wCards: [],
   cardPosition: 0,
 })
@@ -56,9 +57,10 @@ socket.on('tv', (e) => {
   console.log(e)
 })
 
-socket.on('clear', () => (
-    room.wCards = []
-))
+socket.on('clear', () => {
+  room.wCards = []
+  room.bCardVisible = false
+})
 
 socket.on('updateCardPosition', (e) => {
   room.cardPosition = e;
@@ -91,7 +93,7 @@ let copyCode = () => {
     </div>
 
     <div style="display: flex; align-items: center; gap: 2rem;">
-      <div v-if="room.bCard" style="color:white;">
+      <div v-if="room.bCard && room.bCardVisible" style="color:white;">
         <CardGameCard :text="room.bCard" variant=""></CardGameCard>
       </div>
 

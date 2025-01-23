@@ -124,13 +124,6 @@ export const setupWebSockets = (server: any) => {
                 })
             }
 
-            let TV = currentRoom.users.find((e) => e.role === UserRoles.TV);
-            if (!TV) {
-                return
-            }
-            io.to(TV.socketId).emit("clear")
-
-
             currentRoom.distributeCards();
 
             currentRoom.users.forEach(user => {

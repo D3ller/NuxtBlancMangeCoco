@@ -8,6 +8,21 @@
       <h2 class="title" id="description">Les actus du projet</h2>
       <div class="news-cards">
         <div class="news-card">
+          <h3>Phase de BETA</h3>
+          <p>Le jeu est techniquement jouable, mais pas terminé, il faut encore peaufiner le système de tour par tour ainsi que le système de rechargement de page pour que ce dernier ne fasse pas quitter la partie en cours en cas de problèmes de connexion.De plus, il reste quelques bugs à corrigés.</p> 
+          <p class="date">Publié le 20/01/2025</p>
+        </div>
+        <div class="news-card">
+          <h3>Ajout de nouvelle cartes</h3>
+          <p>De nouvelles cartes sur le thème MMI ont été ajoutées. </p>
+          <p class="date">Publié le 15/01/2025</p>
+        </div>
+        <div class="news-card">
+          <h3>Bonne année 2025 </h3>
+          <p>Toute l'équipe de Banana Split vous souhaite une bonne année.</p>
+          <p class="date">Publié le 01/01/2025</p>
+        </div>
+        <div class="news-card">
           <h3>Test fonctionnalités de gameplay</h3>
           <p>Le système de choix de cartes à été créer et retourne les bonnes données dans la console. </p>
           <p class="date">Publié le 16/12/2024</p>
@@ -40,7 +55,6 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
 </script>
 
 <style scoped>
-/* Styles de base */
 .container {
   padding: 20px;
   overflow-x: hidden; /* Prevent horizontal scrolling */

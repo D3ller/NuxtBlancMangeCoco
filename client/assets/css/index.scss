@@ -7,6 +7,7 @@
 
 *, body {
   font-family: $theme-font;
+  text-rendering: optimizeLegibility;
 }
 
 * {
@@ -319,6 +320,10 @@ body {
           display: block;
           margin-bottom: 0.5rem;
           color: $title-color;
+
+          @media (prefers-color-scheme: dark) {
+            color: white;
+          }
         }
 
         input {
@@ -332,6 +337,10 @@ body {
         font-size: 14px;
         color: $title-color;
         margin-top: 0.75rem;
+
+        @media (prefers-color-scheme: dark) {
+          color: #dfdfdf;
+        }
 
         &:hover {
           text-decoration: underline;
@@ -529,7 +538,7 @@ h2 {
 }
 
 .dark-mode h2, .dark-mode h1 {
-  color: #dfdcd7 !important;
+  color: white !important;
 }
 
 .container {

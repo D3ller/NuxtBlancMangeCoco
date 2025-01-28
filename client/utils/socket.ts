@@ -1,5 +1,5 @@
 import {io} from 'socket.io-client';
 
-const socket = io('http://10.152.10.51:6060');
+const socket = io('https://blancmangecoco.cnelhomme.xyz/');
 
 export default socket;

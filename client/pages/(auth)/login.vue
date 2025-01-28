@@ -2,37 +2,39 @@
   <div id="page_login">
     <div class="container">
       <h2>Connexion</h2>
-          <form @submit.prevent="submitLogin">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" v-model="loginCred.email" required placeholder="Entrez votre email"/>
-            </div>
-
-            <div class="form-group">
-              <label for="password">Mot de passe</label>
-              <input type="password" id="password" v-model="loginCred.password" required
-                     placeholder="Entrez votre mot de passe"/>
-            </div>
-
-            <Button type="submit">Se connecter</Button>
-
-            <router-link class="register" to="/register">Pas encore inscrit? </router-link>
-
-            <p v-if="login.error" class="error-message">{{ login.error }}</p>
-
-            <div class="social">
-              <div class="social-login">
-                <button class="social-btn discord" @click="loginWith('discord')">
-                  <nuxt-img src="/img/discord.webp" alt="Discord"/>
-                </button>
-                <button class="social-btn google" @click="loginWith('google')">
-                  <nuxt-img src="/img/google.png" alt="Google"/>
-                </button>
-              </div>
-            </div>
-          </form>
+      <form @submit.prevent="submitLogin">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" v-model="loginCred.email" placeholder="Entrez votre email" required type="email"/>
         </div>
-      </div>
+
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input id="password" v-model="loginCred.password" placeholder="Entrez votre mot de passe" required
+                 type="password"/>
+        </div>
+
+        <Button type="submit">Se connecter</Button>
+
+        <router-link class="register" to="/register">Pas encore inscrit?</router-link>
+
+        <p v-if="loginCred.error" class="error-message">{{ loginCred.error }}</p>
+
+        <div class="social">
+          <div class="social-login">
+            <button class="social-btn discord" @click="loginWith('discord')">
+              <nuxt-img alt="Discord" src="/img/discord.webp"/>
+              Se connecter avec Discord
+            </button>
+            <button class="social-btn google" @click="loginWith('google')">
+              <nuxt-img alt="Google" src="/img/google.png"/>
+              Se connecter avec Google
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
 
 </template>
@@ -40,7 +42,7 @@
 <script setup>
 const router = useRouter()
 
-const { login } = useAuth()
+const {login} = useAuth()
 
 let loginCred = reactive({
   email: '',
@@ -76,53 +78,4 @@ let loginWith = (provider) => {
 </script>
 
 <style scoped>
-
-.social {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-}
-
-.social-login {
-  display: flex;
-  justify-content: space-around;
-}
-
-.social-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  margin: 5px;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: white;
-}
-
-.social-btn img {
-  width: 34px;
-  /* Taille de l'image */
-  height: 24px;
-  display: block;
-  /* Pour centrer l'image */
-  object-fit: contain;
-}
-
-.discord {
-  background-color: #5F6FBE;
-}
-
-.google {
-  background-color: #ffffff;
-}
-
-.webmail {
-  background-color: white;
-}
-
-.social-btn:hover {
-  transform: scale(1.1);
-}
 </style>

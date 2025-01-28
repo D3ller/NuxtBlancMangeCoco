@@ -18,25 +18,5 @@ export default defineNuxtConfig({
         modelsDir: 'models',
         devtools: true,
     },
-    pinia: {
-        storeDirs: ['./stores/**']
-    },
-    fonts: {
-        defaults: {
-            weights: [400, 500, 600, 700],
-            preload: true,
-        },
-
-        families: [
-            {
-                name: 'MAutotune',
-                src: '/fonts/Saans-Medium.woff2'
-            }
-        ],
-        fallbacks: {
-            'serif': ['Times New Roman'],
-            'sans-serif': ['MAutotune'],
-        },
-    },
     modules: ['@nuxt/fonts', '@nuxt/image', 'nuxt-mongoose', '@nuxtjs/color-mode'],
 })

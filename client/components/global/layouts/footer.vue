@@ -1,22 +1,18 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 let footer = [
-    {
-  title: "Le Jeu",
-  subLink: [
-    {
-      title: "Règles",
-      to: "/regles"
-    },
-    {
-      title: "Hub",
-      to: "/hub"
-    },
-    {
-      title: "Set de cartes",
-      to: "/set"
-    }
-  ]
-},
+  {
+    title: "Le Jeu",
+    subLink: [
+      {
+        title: "Règles",
+        to: "/regles"
+      },
+      {
+        title: "Hub",
+        to: "/room/list"
+      }
+    ]
+  },
   {
     title: "Compte",
     subLink: [
@@ -40,7 +36,7 @@ let footer = [
       <div class="footer-flex">
         <div class="footer-content"><p class="title">Banana Split</p></div>
         <div class="flex">
-          <div class="footer-content" v-for="(f, index) in footer" :key="index">
+          <div v-for="(f, index) in footer" :key="index" class="footer-content">
             <p class="title">{{ f.title }}</p>
             <div v-if="f.subLink" class="sub-link">
               <nuxt-link v-for="(s, index) in f.subLink" :key="index" :to="s.to">{{ s.title }}</nuxt-link>

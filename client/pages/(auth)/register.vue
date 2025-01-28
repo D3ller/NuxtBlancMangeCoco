@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 let data = reactive({
   email: '',
   pseudo: '',
@@ -8,17 +8,12 @@ let data = reactive({
 
 function submitRegister() {
   if (data.email === '' || data.password === '' || data.pseudo === '') {
-    this.error = "Veuillez remplir tous les champs.";
+    data.error = "Veuillez remplir tous les champs.";
   } else {
-    this.error = '';
+    data.error = '';
     console.log("Email:", data.email, "Pseudo:", data.pseudo, "Password:", data.password);
   }
 }
-
-function registerWith(provider) {
-  console.log("Inscription via", provider);
-}
-
 
 </script>
 
@@ -29,33 +24,33 @@ function registerWith(provider) {
         <div class="form-group">
           <label for="email">Email</label>
           <input
-              type="email"
               id="email"
               v-model="data.email"
-              required
               placeholder="Entrez votre email"
+              required
+              type="email"
           />
         </div>
 
         <div class="form-group">
           <label for="pseudo">Pseudo</label>
           <input
-              type="text"
               id="pseudo"
               v-model="data.pseudo"
-              required
               placeholder="Entrez votre pseudo"
+              required
+              type="text"
           />
         </div>
 
         <div class="form-group">
           <label for="password">Mot de passe</label>
           <input
-              type="password"
               id="password"
               v-model="data.password"
-              required
               placeholder="Entrez votre mot de passe"
+              required
+              type="password"
           />
         </div>
 
@@ -69,68 +64,20 @@ function registerWith(provider) {
         <!-- Boutons sociaux pour l'inscription -->
         <div class="social">
           <div class="social-login">
-            <button class="social-btn discord" @click="registerWith('discord')">
-              <nuxt-img src="/img/discord.webp" alt="Discord"/>
+            <button class="social-btn discord" @click="loginWith('discord')">
+              <nuxt-img alt="Discord" src="/img/discord.webp"/>
+              Se connecter avec Discord
             </button>
-            <button class="social-btn google" @click="registerWith('google')">
-              <nuxt-img src="/img/google.png" alt="Google"/>
-            </button>
-            <button class="social-btn webmail" @click="registerWith('webmail')">
-              <nuxt-img src="/img/urca.png" alt="Webmail"/>
+            <button class="social-btn google" @click="loginWith('google')">
+              <nuxt-img alt="Google" src="/img/google.png"/>
+              Se connecter avec Google
             </button>
           </div>
         </div>
       </form>
-  </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-/* Boutons sociaux */
-.social {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-}
-
-.social-login {
-  display: flex;
-  justify-content: space-around;
-}
-
-.social-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  margin: 5px;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: white;
-}
-
-.social-btn img {
-  width: 34px; /* Taille de l'image */
-  height: 24px;
-  display: block;
-  object-fit: contain;
-}
-
-.discord {
-  background-color: #5F6FBE;
-}
-
-.google {
-  background-color: #ffffff;
-}
-
-.webmail {
-  background-color: white;
-}
-
-.social-btn:hover {
-  transform: scale(1.1);
-}
 </style>

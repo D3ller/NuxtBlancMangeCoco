@@ -12,11 +12,7 @@ socket.on('connect', () => {
   console.log('Successfully connected!');
 });
 
-socket.on('id', (e) => {
-  console.log(e)
-})
-
-const colorMode = useColorMode()
-
-console.log(colorMode.preference)
+// socket.on('id', (e) => {
+//   console.log(e)
+// })
 </script>

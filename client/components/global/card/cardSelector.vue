@@ -7,14 +7,14 @@ console.log(props.cards)
 
 let emit = defineEmits(['choose-card'])
 
-function chooseCard(index: number) {
-  emit('choose-card', index)
+function chooseCard(index: number, id) {
+  emit('choose-card', index, id)
 }
 </script>
 
 <template>
 <div style="display: flex; gap: 1rem">
-  <card-game-card @click="chooseCard(index)" v-for="(c, index) in props.cards" :text="c.text" variant="word"></card-game-card>
+  <card-game-card v-for="(c, index) in props.cards" :key="c._id" :text="c.text" variant="word" @click="chooseCard(index, c._id)"></card-game-card>
 </div>
 </template>
 

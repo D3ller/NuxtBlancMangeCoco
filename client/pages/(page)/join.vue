@@ -15,15 +15,14 @@ if(!code.value) {
   navigateTo('/');
 }
 
-function joinRoom(Myusername, Code) {
-  socket.emit('join-server', Code, Myusername, (e) => {
-    console.log(e)
+function joinRoom(myUsername :string, code :string) {
+  socket.emit('join-server', code, myUsername, (e) => {
     if (!e.success) {
       error.value = e.message
       return
     }
     error.value = 'you are in'
-    router.push(`room/${Code}`)
+    router.push(`room/${code}?username=${myUsername}`)
   })
 }
 

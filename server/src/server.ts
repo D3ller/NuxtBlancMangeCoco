@@ -28,25 +28,25 @@ app.get('/user/:id', (req, res) => {
     res.send(getUserBySocketId(id));
 })
 
-export let white_cards: [] = [];
-export let blue_cards: [] = [];
+// export let white_cards: [] = [];
+// export let blue_cards: [] = [];
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(async () => {
-        console.log('Connecté!');
+// mongoose.connect(process.env.MONGO_URI)
+//     .then(async () => {
+//         console.log('Connecté!');
 
-        const db = mongoose.connection.db;
-        const fetchCollectionContent = async (collectionName) => {
-            const collection = db?.collection(collectionName);
-            return await collection?.find().toArray();
-        };
+//         const db = mongoose.connection.db;
+//         const fetchCollectionContent = async (collectionName) => {
+//             const collection = db?.collection(collectionName);
+//             return await collection?.find().toArray();
+//         };
 
-        white_cards = await fetchCollectionContent('white_cards');
-        blue_cards = await fetchCollectionContent('blue_cards');
+//         white_cards = await fetchCollectionContent('white_cards');
+//         blue_cards = await fetchCollectionContent('blue_cards');
 
-        mongoose.connection.close();
-    })
-    .catch(err => console.error('Erreur:', err));
+//         mongoose.connection.close();
+//     })
+//     .catch(err => console.error('Erreur:', err));
 
 const networkInterfaces = os.networkInterfaces();
 

@@ -17,7 +17,7 @@ let error = ref('')
 
 function joinRoom(Myusername, code) {
   socket.emit('join-server', code, Myusername, (e) => {
-    console.log(e)
+    // console.log(e)
     if (!e.success) {
       error.value = e.message
       return

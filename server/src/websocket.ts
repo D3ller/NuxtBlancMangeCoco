@@ -1,7 +1,86 @@
-import {Server} from "socket.io";
-import {addRoom, getRoomAvaible, Room, rooms, RoomStatus, User, UserRoles} from "./utils";
-import {Messages} from "./utils/message.ts";
+import { Server } from "socket.io";
+import { addRoom, countAnswer, deleteCardFromDeck, deleteRoom, distributeCards, getRoomAvailable, Room, rooms, RoomStatus, setHandCard, User, UserRoles } from "./utils";
+import { Messages } from "./utils/message.ts";
 import bannedWords from './utils/bannedWord.json';
+import mongoose, { Mongoose } from "mongoose";
+import { RoomMongoose } from "./models/RoomsModel.ts";
+import { WhiteCardMongoose } from "./models/WhiteCardModel.ts";
+import { BlueCardMongoose } from "./models/BlueCardModel.ts";
+
+async function connectDb() {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log('Connected to MongoDB');
+    } catch (error) {
+        throw new Error()
+    }
+}
+
+async function distributeCards(currentRoom) {
+    try {
+        // Récupérer les cartes disponibles
+        let whiteCards = await WhiteCardMongoose.find();
+        let blueCards = await BlueCardMongoose.find();
+
+        // Vérifier s'il y a des cartes disponibles
+        if (whiteCards.length === 0 || blueCards.length === 0) {
+            throw new Error('Il n\'y a pas assez de cartes disponibles pour distribuer.');
+        }
+
+        // Distribuer une carte bleue à chaque utilisateur
+        for (const user of currentRoom.users) {
+            // Vérifier si les cartes bleues sont disponibles
+            if (blueCards.length === 0) {
+                throw new Error('Plus de cartes bleues disponibles.');
+            }
+
+            // Sélectionner une carte bleue aléatoire pour la room
+            const randomBlueIndex = Math.floor(Math.random() * blueCards.length);
+            const selectedBlueCard = blueCards[randomBlueIndex];
+
+            // Retirer la carte bleue du deck
+            blueCards.splice(randomBlueIndex, 1);
+
+            // Ajouter la carte bleue à la room
+            currentRoom.blueCard = selectedBlueCard;
+
+            // Distribuer des cartes blanches aux utilisateurs
+            const cardsToAdd = 11 - user.cards.length;  // Nombre de cartes blanches à distribuer pour atteindre 11 cartes
+
+            for (let i = 0; i < cardsToAdd; i++) {
+                if (whiteCards.length === 0) {
+                    throw new Error('Plus de cartes blanches disponibles.');
+                }
+
+                // Sélectionner une carte blanche aléatoire
+                const randomWhiteIndex = Math.floor(Math.random() * whiteCards.length);
+                const selectedWhiteCard = whiteCards[randomWhiteIndex];
+
+                // // Retirer la carte blanche du deck
+                whiteCards.splice(randomWhiteIndex, 1);
+
+                // Ajouter la carte blanche à l'utilisateur
+                user.cards.push(selectedWhiteCard);
+            }
+        }
+
+        // Mettre à jour la room dans la base de données avec les utilisateurs et leurs cartes
+        currentRoom.users = currentRoom.users.map(user => ({
+            ...user,
+            cards: user.cards,
+        }));
+
+        // Sauvegarder la room mise à jour dans la base de données
+        // await currentRoom.save();
+
+        return await currentRoom
+
+        console.log('Cartes distribuées avec succès.');
+    } catch (error) {
+        console.error('Erreur lors de la distribution des cartes:', error);
+        throw error;
+    }
+}
 
 export const setupWebSockets = (server: any) => {
     const io = new Server(server, {
@@ -11,44 +90,37 @@ export const setupWebSockets = (server: any) => {
     });
 
     io.on("connection", (socket) => {
-        socket.emit('id', socket.id);
 
         socket.on('disconnect', () => {
             console.log(`Déconnecté: ${socket.id}`);
         });
 
-        socket.on('get-players', (roomName: string, callback) => {
-            let currentRoom = rooms.find(room => room.name === roomName);
-            if (!currentRoom) {
-                return callback({
-                    success: false,
-                    message: Messages.ROOM_NOT_FOUND
-                })
-            }
+        /**
+         * Socket function to initailize the room for play
+         * The room being create in the database for keep the datas if the socket has been disconnected
+         */
+        socket.on('create-server', async (roomName: string, callback) => {
+            // if (await Room.isRoomExist(roomName)) {
+            //     callback({
+            //         success: false,
+            //         message: Messages.ROOM_ALREADY_EXIST
+            //     })
+            //     return;
+            // }
 
-            let players = currentRoom.users.find((b) => b.socketId === socket.id);
+            await connectDb()
 
-            callback({
-                success: true,
-                players: currentRoom.getRoom(),
-                currentPlayers: players
+            // creation de la room dans la base de donnée
+            const room = new RoomMongoose({
+                name: roomName,
+                status: RoomStatus.WAITING
             })
-        })
 
+            await room.save()
 
-        socket.on('create-server', (roomName: string, callback) => {
-            if (Room.isRoomExist(roomName)) {
-                callback({
-                    success: false,
-                    message: Messages.ROOM_ALREADY_EXIST
-                })
-                return;
-            }
+            mongoose.disconnect()
+            // io.emit('rooms', await getRoomAvailable());
 
-            const room: Room = new Room(roomName, Room.generateRoomId(), new User("TV", 1, UserRoles.TV, socket.id));
-            addRoom(room);
-            socket.join(roomName);
-            io.emit('rooms', getRoomAvaible());
             callback({
                 success: true,
                 message: Messages.ROOM_CREATED,
@@ -57,98 +129,62 @@ export const setupWebSockets = (server: any) => {
 
         })
 
-        socket.on('confirm-card', (socket: string, roomName: string, callback) => {
-            let currentRoom = rooms.find(room => room.name === roomName);
-            if (!currentRoom) {
-                return callback({
-                    success: false,
-                    message: Messages.ROOM_NOT_FOUND
-                })
-            }
+        socket.on('getRooms', async (cb) => {
+            // function pour récupérer toutes les rooms de la BDD
 
-            console.log(socket)
+            await connectDb()
 
-            let user = currentRoom.users.find(user => user.socketId === socket);
-            if (!user) {
-                return callback({
-                    success: false,
-                    message: Messages.USER_NOT_FOUND
-                })
-            }
+            let rooms = await RoomMongoose.find();
 
-            console.log(user.hand);
-
-            currentRoom.users.forEach((e) => {
-                if (e.role != UserRoles.TV) {
-                    e.role = UserRoles.USER;
-                    e.deleteCardFromDeck(0)
-                }
-
-                if (e.hand === user.hand) {
-                    console.log('username gagnant: ', user.username);
-                    user.win++;
-                    console.log('user wins: ', user.win);
-                    io.to(user?.socketId).emit('win-turn')
-                    user.role = UserRoles.LEADER;
-                }
-                // {
-                //     success: true,
-                //     players: currentRoom.getRoom(),
-                //     currentPlayers: e
-                // }
+            cb({
+                success: true,
+                message: 'ROOM',
+                rooms
             })
+        })
 
-            currentRoom.users.forEach((e) => {
-                io.to(e.socketId).emit("turn", {
+        socket.on('getCurrentRoom', async (roomName, cb) => {
+            // function pour récupérer la room en fonction de son nom
+
+            await connectDb()
+
+            let room = await RoomMongoose.findOne({ name: roomName });
+
+            if (!room) {
+                cb({
+                    success: false,
+                    message: Messages.ROOM_NOT_FOUND,
+                    room
+                })
+            }
+
+            cb({
+                success: true,
+                message: 'ROOM',
+                room
+            })
+        })
+
+        socket.on('getCurrentPlayer', async (username, roomName, cb) => {
+            await connectDb()
+
+            let currentRoom = await RoomMongoose.findOne({ name: roomName });
+
+            const user = currentRoom.users.find(user => user.username === username);
+
+            if (user.username == username) {
+                cb({
                     success: true,
-                    players: currentRoom.getRoom(),
-                    currentPlayers: e
-                })
-            })
-
-
-            // {
-            //     success: true,
-            //     players: currentRoom.getRoom(),
-            //     currentPlayers: players
-            // }
-        })
-
-        socket.on('next-turn', (roomName, cb) => {
-            let currentRoom = rooms.find(room => room.name === roomName);
-
-            if (!currentRoom) {
-                return cb({
-                    success: false,
-                    message: Messages.ROOM_NOT_FOUND
+                    message: 'USER FOUND',
+                    user
                 })
             }
-
-            let TV = currentRoom.users.find((e) => e.role === UserRoles.TV);
-            if (!TV) {
-                return
-            }
-            io.to(TV.socketId).emit("clear")
-
-
-            currentRoom.distributeCards();
-
-            currentRoom.users.forEach(user => {
-                if (user.role === UserRoles.TV) {
-                    io.to(user.socketId).emit('blue-card', currentRoom.currentCard);
-                    return
-                }
-                if (user.role === UserRoles.LEADER) return;
-                io.to(user.socketId).emit('cards', user.cards);
-            })
-
-            return cb({
-                currentRoom
-            })
         })
 
-        socket.on('join-server', (roomName: string, username: string, callback) => {
-            let currentRoom = rooms.find(room => room.name === roomName);
+        socket.on('join-server', async (roomName, username, callback) => {
+            await connectDb()
+
+            let currentRoom = await RoomMongoose.findOne({ name: roomName });
 
             if (!currentRoom) {
                 return callback({
@@ -186,175 +222,144 @@ export const setupWebSockets = (server: any) => {
                 })
             }
 
-            if (currentRoom.isUserExist(username)) {
-                return callback({
-                    success: false,
-                    message: Messages.USERNAME_ALREADY_TAKEN
-                })
+            currentRoom.users.forEach((user) => {
+                if (user.username === username) {
+                    return callback({
+                        success: false,
+                        message: Messages.USERNAME_ALREADY_TAKEN
+                    })
+                }
+            })
+
+            // initialisation du nouvel utilisateur
+            const newUser = {
+                _id: new mongoose.Types.ObjectId(),
+                username,
+                role: currentRoom.users.length <= 0 ? UserRoles.LEADER : UserRoles.USER,
+                socketId: socket.id,
+                cards: [],
+                wins: 0
             }
 
-            let role = currentRoom.users.length === 1 ? UserRoles.LEADER : UserRoles.USER;
-            let user = new User(username, currentRoom.users.length + 1, role, socket.id);
-            currentRoom.addUser(user);
+            currentRoom.users.push(newUser);
+
             socket.join(roomName);
-            io.emit('rooms', getRoomAvaible());
-            io.to(roomName).emit('room-update', currentRoom);
+
+            io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
+
+            currentRoom.save();
+
             callback({
                 success: true,
-                message: "Vous avez rejoint la salle avec succès.",
-                user: user,
-                players: currentRoom.getRoom()
+                message: 'ROOM JOINED'
             })
 
         })
 
-        socket.on('start-game', (roomName: string, callback) => {
+        socket.on('joinTvGroup', (roomName, callback) => {
+            socket.join(`TV_${roomName}`);
 
-            socket.emit('id', socket.id);
+            callback({
+                success: true,
+                message: 'ROOM JOINED'
+            })
+        })
 
+        // --------------------- PARTIE GESTION DE LA GAME ----------------------- //
 
-            let currentRoom = rooms.find(room => room.name === roomName);
-            if (!currentRoom) {
-                return callback({
-                    success: false,
-                    message: Messages.ROOM_NOT_FOUND
-                })
+        socket.on('startGame', async (roomName) => {
+            await connectDb()
+
+            let currentRoom = await RoomMongoose.findOne({ name: roomName });
+
+            currentRoom.status = RoomStatus.STARTED
+
+            currentRoom = await distributeCards(currentRoom)
+
+            // console.log(currentRoom)
+
+            io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
+
+            currentRoom.isModified()
+
+            await currentRoom.save()
+
+        })
+
+        socket.on('choose-card', async (roomName, player, cardChoosed) => {
+            await connectDb()
+
+            let currentRoom = await RoomMongoose.findOne({ name: roomName });
+
+            let user = {
+                id: player._id,
+                socketId: player.socketId
             }
-            const leader = currentRoom.users.find(user => user.role === UserRoles.LEADER);
-            if (!leader || leader.socketId !== socket.id) {
-                return callback({
-                    success: false,
-                    message: Messages.NOT_LEADER,
-                    leader: leader
-                })
+
+            currentRoom.answers.push({ ...cardChoosed, ...user })
+
+            if (currentRoom.answers.length == currentRoom?.users.length - 1) {
+                io.to(`TV_${roomName}`).to(roomName).emit('answers', currentRoom)
+                // io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
             }
 
-            if (currentRoom.users.length - 3 < 1) {
-                return callback({
-                    success: false,
-                    message: Messages.ROOM_TOO_SMALL
-                })
+            await currentRoom.save()
+
+        })
+
+        socket.on('cardPosition', (cardPos, roomName) => {
+            io.to(`TV_${roomName}`).emit('updatePos', cardPos)
+        })
+
+        socket.on('confirm', async (roomName, cardPos, cb) => {
+            await connectDb()
+
+            let currentRoom = await RoomMongoose.findOne({ name: roomName });
+
+            if (!currentRoom || !currentRoom.answers[cardPos]) {
+                console.error('Invalid room or answer position');
+                return cb({ error: 'Invalid room or answer position' });
             }
 
-            if (currentRoom.status === RoomStatus.STARTED) {
-                return callback({
-                    success: false,
-                    message: Messages.ALREADY_STARTED
-                })
+            const answer = currentRoom.answers[cardPos];
+
+            // Recherche de l'utilisateur correspondant
+            const winner = currentRoom.users.find(user =>
+                String(user._id) === String(answer.id)
+            );
+
+            if (!winner) {
+                console.error('No matching user found for answer:', answer);
+                return cb({ error: 'No matching user found' });
             }
 
-            currentRoom.status = RoomStatus.STARTED;
-            io.emit('rooms', getRoomAvaible());
-            currentRoom.distributeCards();
-            io.to(roomName).emit('game-started', currentRoom);
+            // console.log('Winner found:', winner);
 
             currentRoom.users.forEach(user => {
-                if (user.role === UserRoles.TV) {
-                    io.to(user.socketId).emit('blue-card', currentRoom.currentCard);
-                    return
-                }
-                if (user.role === UserRoles.LEADER) return;
-                io.to(user.socketId).emit('cards', user.cards);
+                user.role = UserRoles.USER
             })
 
-            callback({
-                success: true,
-                message: "La partie a commencé."
+            currentRoom.blueCard = ''
+            currentRoom.answers = []
+
+            // Incrémentation des victoires
+            winner.wins += 1;
+            winner.role = UserRoles.LEADER
+
+            currentRoom = await distributeCards(currentRoom);
+
+            currentRoom?.isModified()
+            await currentRoom?.save()
+
+            cb({
+                winner,
+                currentRoom
             })
+
+            // io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
+            io.to(roomName).emit('turn', currentRoom)
         })
 
-        socket.on('get-rooms', (callback) => {
-            callback(getRoomAvaible());
-        })
-
-        socket.on('choose-card', async (roomName: string, index: number, callback) => {
-
-            let currentRoom = rooms.find(room => room.name === roomName);
-            if (!currentRoom) {
-                return callback({
-                    success: false,
-                    message: Messages.ROOM_NOT_FOUND
-                })
-            }
-
-            let user = currentRoom.users.find(user => user.socketId === socket.id);
-            if (!user) {
-                return callback({
-                    success: false,
-                    message: Messages.USER_NOT_FOUND
-                })
-            }
-
-            user.setHandCard(index);
-
-            let tv = currentRoom.users.find(user => user.role === UserRoles.TV)
-            let leader = currentRoom.users.find((u) => u.role === UserRoles.LEADER);
-            if (tv && leader) {
-                if (currentRoom.countAnswer()) {
-                    io.to(tv?.socketId).emit('tv', 'tt le monde a joue')
-
-                    let white_cards: string[] = []
-
-                    currentRoom.users.forEach(async (e) => {
-                        if (e.role === UserRoles.TV || e.role === UserRoles.LEADER) {
-                            return;
-                        }
-                        e.cards[0] = {...e.cards[0], socketId: e.socketId};
-                        white_cards.push(e.cards[0])
-                    })
-
-                    io.to(tv?.socketId).emit('white_cards', white_cards);
-
-                    io.to(leader?.socketId).emit("final-choice", white_cards);
-
-                } else {
-                    io.to(tv?.socketId).emit('tv', 'ceci est la tele')
-                }
-            } else {
-                console.log("nnaaaan")
-            }
-        })
-
-        socket.on('cardPosition', (index: number, roomName: string, callback) => {
-            let currentRoom = rooms.find(room => room.name === roomName);
-            if (!currentRoom) {
-                return callback({
-                    success: false,
-                    message: Messages.ROOM_NOT_FOUND
-                })
-            }
-
-            let tv = currentRoom.users.find((b) => b.role === UserRoles.TV);
-            if (tv) {
-                io.to(tv.socketId).emit('updateCardPosition', index);
-            }
-        })
-
-        socket.on('leave-room', (roomName: string, callback) => {
-            let currentRoom = rooms.find(room => room.name === roomName);
-            if (!currentRoom) {
-                return callback({
-                    success: false,
-                    message: Messages.ROOM_NOT_FOUND
-                })
-            }
-
-            let user = currentRoom.users.find(user => user.socketId === socket.id);
-            if (!user) {
-                return callback({
-                    success: false,
-                    message: Messages.USER_NOT_FOUND
-                })
-            }
-
-            currentRoom.RemoveUser(user);
-
-            io.to(roomName).emit('room-update', currentRoom);
-            callback({
-                success: true,
-                message: Messages.ROOM_LEFT
-            })
-        })
     });
 
     return io;

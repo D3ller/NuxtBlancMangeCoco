@@ -31,7 +31,7 @@ let card: { title: string, text: string }[] = [
     </div>
 
     <div class="flex">
-      <Button href="/set">Découvrir nos sets</Button>
+      <Button href="">Découvrir nos sets</Button>
     </div>
 
 

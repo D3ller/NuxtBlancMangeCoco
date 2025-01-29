@@ -22,8 +22,13 @@ function joinRoom(myUsername :string, code :string) {
       return
     }
     error.value = 'you are in'
-    router.push(`room/${code}?username=${myUsername}`)
+    if (e.success) {
+      router.push(`room/${code}?username=${myUsername}`)
+    }
+
+    // console.log('joined')
   })
+
 }
 
 </script>

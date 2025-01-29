@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import addRoom, { countAnswer, deleteCardFromDeck, deleteRoom, distributeCards, getRoomAvailable, Room, rooms, RoomStatus, setHandCard, User, UserRoles } from "./utils";
+import addRoom, { countAnswer, deleteCardFromDeck, deleteRoom, getRoomAvailable, Room, rooms, RoomStatus, setHandCard, User, UserRoles } from "./utils";
 import { Messages } from "./utils/message.ts";
 import bannedWords from './utils/bannedWord.json';
 import mongoose, { Mongoose } from "mongoose";
@@ -10,7 +10,7 @@ import { BlueCardMongoose } from "./models/BlueCardModel.ts";
 async function connectDb() {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('Connected to MongoDB');
+        // console.log('Connected to MongoDB');
     } catch (error) {
         throw new Error()
     }
@@ -82,6 +82,49 @@ async function distributeCards(currentRoom) {
     }
 }
 
+// function pour que si la room n'est pas occupée depuis 5min elle est reset
+// Map() sert à gerer des sortes d'etats, il peut donc comparer une ancienne variable avec une nouvelle
+const roomActivity = new Map();
+// 3 min d'inactivité avant expulsion
+const INACTIVITY_LIMIT = 180000;
+
+function resetRoomActivity(roomName, io) {
+    if (roomActivity.has(roomName)) {
+        clearTimeout(roomActivity.get(roomName).timer);
+    }
+
+    const timer = setTimeout(async () => {
+        // deleteRoom(roomName);
+
+        // for reset or delete the room
+
+        await connectDb();
+        let room = await RoomMongoose.findOne({ name: roomName });
+
+        if (!room) return;
+
+        if (room.name === 'IUT2TROYES') {
+            room.status = "waiting";
+            room.playerWon = "";
+            room.answers = [];
+            room.users = [];
+            room.blueCard = null;
+
+            await room.save()
+
+            io.to(roomName).emit('kick')
+            io.to(`TV_${roomName}`).emit('roomUpdate', room)
+        } else {
+            await io.to(roomName).to(`TV_${roomName}`).emit('kick')
+            await room.deleteOne({ name: roomName });
+
+        }
+
+    }, INACTIVITY_LIMIT);
+
+    roomActivity.set(roomName, { lastRequest: Date.now(), timer });
+}
+
 export const setupWebSockets = (server: any) => {
     const io = new Server(server, {
         cors: {
@@ -110,30 +153,43 @@ export const setupWebSockets = (server: any) => {
 
             await connectDb()
 
-            let rooms = await RoomMongoose.find({ name: roomName });
+            let roomExists = await RoomMongoose.findOne({ name: roomName });
 
-            // vérification de l'existance de la room
-            callback({
-                success: false,
-                message: Messages.ROOM_ALREADY_EXIST
-            })
+            resetRoomActivity(roomName, io);
 
-            // creation de la room dans la base de donnée
-            const room = new RoomMongoose({
-                name: roomName,
-                status: RoomStatus.WAITING
-            })
+            if (!roomExists) {
 
-            await room.save()
+                // callback({
+                //     success: false,
+                //     message: 'ROOM ALREADY CREATED',
+                //     room: roomExists
+                // })
 
-            mongoose.disconnect()
-            // io.emit('rooms', await getRoomAvailable());
+                // return
 
-            callback({
-                success: true,
-                message: Messages.ROOM_CREATED,
-                room: room
-            })
+                // creation de la room dans la base de donnée
+                const room = new RoomMongoose({
+                    name: roomName,
+                    status: RoomStatus.WAITING
+                })
+
+                await room.save()
+
+                mongoose.disconnect()
+                // io.emit('rooms', await getRoomAvailable());
+
+                callback({
+                    success: true,
+                    message: Messages.ROOM_CREATED,
+                    room: room
+                })
+            } else {
+                callback({
+                    success: false,
+                    message: Messages.ROOM_CREATED
+                })
+            }
+
 
         })
 
@@ -178,6 +234,8 @@ export const setupWebSockets = (server: any) => {
 
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
 
+            resetRoomActivity(roomName, io);
+
             if (!currentRoom) {
                 return
             }
@@ -189,10 +247,21 @@ export const setupWebSockets = (server: any) => {
             }
 
             if (user.username == username) {
+
+                socket.join(roomName)
+                user.socketId = socket.id
+
+                await currentRoom.save()
+
                 cb({
                     success: true,
                     message: 'USER FOUND',
                     user
+                })
+            } else {
+                cb({
+                    success: false,
+                    message: 'USER NOT FOUND'
                 })
             }
         })
@@ -238,14 +307,28 @@ export const setupWebSockets = (server: any) => {
                 })
             }
 
-            currentRoom.users.forEach((user) => {
-                if (user.username === username) {
-                    return callback({
-                        success: false,
-                        message: Messages.USERNAME_ALREADY_TAKEN
-                    })
-                }
-            })
+            // function problématique car elle faisait en sorte de bypass le filtre mis en place
+            // pour fix ça on utilise "some()", qui ne retourne rien tant que le code n'est pas exécuté
+            // je ne sais pas si avec une boucle for ça aurait pu marcher
+
+            // currentRoom.users.forEach((user) => {
+            //     if (user.username === username) {
+            //         return callback({
+            //             success: false,
+            //             message: Messages.USERNAME_ALREADY_TAKEN
+            //         })
+            //     }
+            // })
+
+            // maintenant avant de passer à la suite on vérifie que le nom de l'utilisateur ne soit pas en double
+
+            if (currentRoom.users.some(user => user.username === username)) {
+                console.log('already in the room')
+                return callback({
+                    success: false,
+                    message: Messages.USERNAME_ALREADY_TAKEN
+                });
+            }
 
             // initialisation du nouvel utilisateur
             const newUser = {
@@ -258,11 +341,11 @@ export const setupWebSockets = (server: any) => {
             }
 
             socket.join(roomName);
-            
+
             currentRoom.users.push(newUser);
 
             await currentRoom.save();
-            
+
             io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
 
             callback({
@@ -283,10 +366,23 @@ export const setupWebSockets = (server: any) => {
 
         // --------------------- PARTIE GESTION DE LA GAME ----------------------- //
 
-        socket.on('startGame', async (roomName) => {
+        socket.on('startGame', async (roomName, callback) => {
             await connectDb()
 
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
+
+            if (!currentRoom) {
+                return
+            }
+
+            if (currentRoom.users.length < 3) {
+                callback({
+                    success: false,
+                    message: 'pas assez de joueurs'
+                })
+
+                return
+            }
 
             currentRoom.status = RoomStatus.STARTED
 
@@ -296,23 +392,35 @@ export const setupWebSockets = (server: any) => {
 
             io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
 
-            currentRoom.isModified()
+            // await currentRoom.isModified()
 
             await currentRoom.save()
 
         })
 
-        socket.on('choose-card', async (roomName, player, cardChoosed) => {
+        socket.on('choose-card', async (roomName, username, cardChoosed) => {
             await connectDb()
 
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
 
-            let user = {
-                id: player._id,
-                socketId: player.socketId
+            if (!currentRoom) {
+                return
             }
 
-            currentRoom.answers.push({ ...cardChoosed, ...user })
+            const user = currentRoom.users.find(user => user.username === username);
+
+            if (!user) {
+                return
+            }
+
+            let inCardUser = {
+                id: user._id,
+                socketId: user.socketId
+            }
+
+            currentRoom.answers.push({ ...cardChoosed, ...inCardUser })
+
+            resetRoomActivity(roomName, io)
 
             if (currentRoom.answers.length == currentRoom?.users.length - 1) {
                 io.to(`TV_${roomName}`).to(roomName).emit('answers', currentRoom)
@@ -367,6 +475,8 @@ export const setupWebSockets = (server: any) => {
             currentRoom?.isModified()
             await currentRoom?.save()
 
+            resetRoomActivity(roomName, io)
+
             cb({
                 winner,
                 currentRoom
@@ -374,6 +484,11 @@ export const setupWebSockets = (server: any) => {
 
             // io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
             io.to(roomName).emit('turn', currentRoom)
+        })
+
+        // fonction pour quitter le jeu proprement
+        socket.on('quit', () => {
+
         })
 
     });

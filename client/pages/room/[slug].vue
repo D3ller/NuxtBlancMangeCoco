@@ -8,9 +8,10 @@
         </div>
       </div>
 
-      <h2 v-if="waiting" class="waiting">En attente des autres joueurs et du choix du leader...</h2>
+      <h2 v-if="currentPlayer.isWaiting" class="waiting">En attente des autres joueurs et du choix du leader...</h2>
 
-      <div v-if="!waiting && currentPlayer.cards && currentRoom.status === 'started' && currentPlayer.role != 'leader'">
+      <div
+        v-if="!currentPlayer.isWaiting && currentPlayer.cards && currentRoom.status === 'started' && currentPlayer.role != 'leader'">
         <cardSelector :cards="currentPlayer.cards" class="selector" @chooseCard="choosenCards" />
       </div>
     </div>
@@ -49,8 +50,6 @@ let cardPosition = ref(0)
 
 let isAnswered = ref(false);
 
-const waiting = ref(false)
-
 /**
  * This is the CurrentRoom reactive variable who manage the game.
  * If you change something in this varibale it can changing screen,
@@ -70,7 +69,8 @@ let currentPlayer = reactive({
   role: '',
   socketId: '',
   cards: [],
-  wins: 0
+  wins: 0,
+  isWaiting: false
 })
 
 onMounted(() => {
@@ -84,10 +84,15 @@ onMounted(() => {
 
   socket.emit('getCurrentPlayer', username, roomName, (cb) => {
     let { user } = cb;
-    currentPlayer = user
+    currentPlayer.username = user.username;
+    currentPlayer.role = user.role;
+    currentPlayer.socketId = user.socketId;
+    currentPlayer.cards = user.cards;
+    currentPlayer.wins = user.wins;
+    currentPlayer.isWaiting = user.isWaiting || false;
   })
 
-  socket.emit('roomUpdate', roomName)
+  // socket.emit('roomUpdate', roomName)
 })
 
 // fonction qui reçoit la mise a jour des autres salle 
@@ -117,11 +122,10 @@ socket.on('playerUpdate', (user) => {
 
 socket.on('turn', (room) => {
   console.log('tour suivant dans 10 sec')
-  
+
   setTimeout(() => {
     console.log('turn')
 
-    waiting.value = false
     isAnswered.value = false
 
     room.users.forEach(user => {
@@ -129,6 +133,7 @@ socket.on('turn', (room) => {
         currentPlayer.cards = user.cards
         currentPlayer.role = user.role
         currentPlayer.wins = user.wins
+        currentPlayer.isWaiting = user.isWaiting
       }
     });
   }, 1000)
@@ -156,24 +161,34 @@ function updateCardPosition(param: string) {
   }
 }
 
-useSeoMeta({
-  title: "Banana Split — Salle " + roomName
-})
-
-function startGame() {
-  socket.emit('startGame', roomName)
-}
-
-const choosenCards = (index) => {
-  waiting.value = true
-  socket.emit('choose-card', roomName, currentPlayer, currentPlayer.cards[index])
-}
-
 socket.on('answers', (p) => {
   currentRoom = p;
   isAnswered.value = true
   // console.log(currentRoom)
 })
+
+socket.on('kick', () => {
+  router.push('/')
+})
+
+useSeoMeta({
+  title: "Banana Split — Salle " + roomName
+})
+
+// functions
+
+function startGame() {
+  socket.emit('startGame', roomName, (cb) => {
+    if (cb.success === false) {
+      console.log(cb.message)
+    }
+  })
+}
+
+const choosenCards = (index) => {
+  currentPlayer.isWaiting = true;
+  socket.emit('choose-card', roomName, currentPlayer.username, currentPlayer.cards[index])
+}
 
 function Confirm() {
   // console.log(currentRoom)

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const route = useRoute();
+const router = useRouter()
 
 definePageMeta({
   layout: 'tv'
@@ -49,6 +50,7 @@ onMounted(() => {
 })
 
 socket.on('roomUpdate', (cb) => {
+  console.log('room updated')
   currentRoom.name = cb.name;
   currentRoom.status = cb.status;
   currentRoom.users = cb.users;
@@ -63,6 +65,10 @@ socket.on('answers', (room) => {
 
 socket.on('updatePos', (pos) => {
   cardPos.value = pos
+})
+
+socket.on('kick', () => {
+  router.push('/')
 })
 
 
@@ -89,8 +95,8 @@ let copyCode = () => {
         </div>
       </nav>
 
-      <NuxtImg v-if="currentRoom.status == 'started'" :src="qrcode" style="width: 300px; height: 300px;"></NuxtImg>
-      <h1 v-if="currentRoom.users.length >= 3 && !currentRoom.status == 'started'" class="start">Prêt à démarrer ?</h1>
+      <NuxtImg v-if="currentRoom.status == 'waiting'" :src="qrcode" style="width: 300px; height: 300px;"></NuxtImg>
+      <h1 v-if="currentRoom.users.length >= 3 && !currentRoom.status == 'waiting'" class="start">Prêt à démarrer ?</h1>
     </div>
 
     <div v-else>

@@ -6,7 +6,8 @@ const UserSchema = new mongoose.Schema({
     role: { type: String, required: true },
     socketId: { type: String, required: true },
     cards: [{ type: Object }],
-    wins: { type: Number, default: 0 }
+    wins: { type: Number, default: 0 },
+    isWaiting: { type: Boolean, default: false }
 });
 
 // Définition du schéma de la room
@@ -16,7 +17,7 @@ const RoomsSchema = new mongoose.Schema({
     users: [UserSchema],
     playerWon: { type: String, default: "" },
     blueCard: { type: Object },
-    answers: [{ type: Object }]
+    answers: [{ type: Object }],
 });
 
 export const RoomMongoose = mongoose.model('Rooms', RoomsSchema)

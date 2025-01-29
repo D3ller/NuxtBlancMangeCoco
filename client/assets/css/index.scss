@@ -1,0 +1,557 @@
+@import "reset";
+@import "variable";
+@import "functions";
+@import "mixins";
+@import "components";
+@import "layouts";
+
+*, body {
+  font-family: $theme-font;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+
+  #page_home {
+    .noise {
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-bottom: 80px;
+
+      .hB {
+        max-width: 500px;
+        margin: 0 auto;
+
+        &-title {
+          width: 100%;
+          font-weight: 700;
+          margin-bottom: 1.5rem;
+          color: $title-color;
+          font-size: rem(48);
+          text-align: center;
+
+          @media screen and (max-width: $md) {
+            font-size: rem(34);
+          }
+        }
+
+        &-description {
+          color: #777777;
+          font-size: rem(16);
+          margin-bottom: 2rem;
+          text-align: center;
+        }
+      }
+
+      .buttonSection {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+
+        @media screen and (max-width: 340px) {
+          > * {
+            width: 100%;
+          }
+        }
+
+      }
+
+      .cardSection {
+        position: relative;
+        min-height: 400px;
+
+        @media screen and (max-width: $md) {
+          display: flex;
+          flex-direction: row-reverse;
+          gap: 1rem;
+          overflow: auto;
+          scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
+          > * {
+            position: relative !important;
+            left: initial !important;
+            right: initial !important;
+            top: initial !important;
+            transform: initial !important;
+          }
+        }
+
+        > * {
+          top: 50px;
+
+          &:first-child {
+            position: absolute;
+            left: 35%;
+            transform: translateX(-50%) rotate(-18deg);
+          }
+
+          &:last-child {
+            position: absolute;
+            right: 30%;
+            transform: translateX(50%) rotate(18deg);
+            z-index: 10;
+
+          }
+
+        }
+      }
+    }
+
+
+    .piment {
+      padding: rem(80) 0;
+
+      @media screen and (max-width: $lg) {
+        padding: rem(40) 0;
+      }
+
+      .grid {
+        gap: rem(16);
+        margin-bottom: 1rem;
+
+        .grid_cols {
+          grid-column: span 4 / span 4;
+
+          @media screen and (max-width: $lg) {
+            grid-column: span 12 / span 12;
+          }
+        }
+
+
+      }
+
+      .flex {
+        display: flex;
+        justify-content: center;
+      }
+
+
+    }
+
+    .faq {
+      padding: rem(80) 0;
+
+      .faq-container {
+        display: flex;
+        flex-direction: column;
+        gap: rem(16);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+    }
+
+    .join-party {
+      padding: rem(80) 0;
+
+      .max-party {
+        max-width: 300px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+
+        input {
+          @include Input;
+        }
+
+        button {
+          width: fit-content;
+        }
+      }
+    }
+  }
+
+  #page_room {
+    padding: 1rem;
+
+    .selector {
+      position: fixed;
+      bottom: 80px;
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      overflow: auto;
+      scroll-snap-align: start;
+      padding-right: 2rem;
+    }
+
+    .waiting {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+      width: 100%;
+      font-weight: 500;
+      padding: 1rem;
+    }
+
+    .title {
+      font-size: rem(24);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: $title-color;
+    }
+
+    #players {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      margin-bottom: 1rem;
+
+      .player-item {
+        padding: 1.5rem;
+        border-radius: 1rem;
+        flex-direction: column;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.00) 100%), #f6f6f6;
+        box-shadow: 0px 1px 2px 0px rgba(21, 30, 58, 0.12), 0px 0px 0px 1px rgba(21, 30, 58, 0.12);
+        gap: 0.5rem;
+        width: 200px;
+        color: #494949;
+      }
+    }
+
+    .roomButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      gap: 1rem;
+    }
+
+  }
+
+  #page_tv {
+    #tv_loaded {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+
+      .start {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      .nav {
+        display: flex;
+        position: absolute;
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        gap: 1rem;
+        width: fit-content;
+
+        .nav-item {
+          padding: 1.5rem;
+          border-radius: 1rem;
+          display: flex;
+          flex-direction: column;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.00) 100%), #f6f6f6;
+          box-shadow: 0px 1px 2px 0px rgba(21, 30, 58, 0.12), 0px 0px 0px 1px rgba(21, 30, 58, 0.12);
+          gap: 0.5rem;
+          color: #494949;
+
+          span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: $title-color;
+            transition: 0.3s;
+          }
+        }
+      }
+    }
+
+    .aside {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .aside-item {
+        padding: 1.5rem;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.00) 100%), #f6f6f6;
+        box-shadow: 0px 1px 2px 0px rgba(21, 30, 58, 0.12), 0px 0px 0px 1px rgba(21, 30, 58, 0.12);
+        gap: 0.5rem;
+        color: #494949;
+        width: 200px;
+      }
+    }
+  }
+
+  #page_login {
+    padding: rem(80) 0;
+
+    h2 {
+      @include secondTitle;
+    }
+
+    form {
+      max-width: 300px;
+      margin: 0 auto;
+
+      @media screen and (max-width: $md) {
+        max-width: 100%;
+        padding: 0 1rem;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: $title-color;
+        }
+
+        input {
+          @include Input;
+        }
+
+      }
+
+      .register {
+        display: block;
+        font-size: 14px;
+        color: $title-color;
+        margin-top: 0.75rem;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  #page_join_room {
+    .join_room {
+      max-width: 300px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      input {
+        @include Input;
+      }
+    }
+  }
+
+  #page_room_list {
+    padding-bottom: 80px;
+
+    .room_grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+
+      .roomCard {
+        @media screen and (max-width: $sm) {
+          width: 100%;
+        }
+      }
+    }
+
+    .white_screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.49);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .qr {
+        width: 250px;
+        height: 250px;
+        @media screen and (max-width: $sm) {
+          width: 150px;
+          height: 150px;
+        }
+      }
+    }
+  }
+
+}
+
+.dark-mode body {
+  background: #141414;
+
+  #page_home {
+    .noise {
+      .hB {
+        &-description {
+          color: #a3a3a3;
+        }
+      }
+    }
+
+    .piment {
+      .about_card {
+        color: #dfdcd7;
+      }
+
+      p {
+        color: #a3a3a3;
+      }
+    }
+  }
+
+  #page_room {
+    padding: 1rem;
+
+    .title {
+      font-size: rem(24);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: $white;
+    }
+
+    #players {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      margin-bottom: 1rem;
+
+      .player-item {
+        background: $box-bg-color;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        flex-direction: column;
+        border: $box-border-color;
+        gap: 0.5rem;
+        color: white;
+        width: 200px;
+      }
+    }
+
+  }
+
+  #page_tv {
+    #tv_loaded {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+
+      .start {
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      .nav {
+        display: flex;
+        position: absolute;
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        gap: 1rem;
+        width: fit-content;
+
+        .nav-item {
+          background: #323030;
+          padding: 1.5rem;
+          border-radius: 1rem;
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #ffffff0d;
+          gap: 0.5rem;
+          color: #b6b6b6;
+
+          span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            transition: 0.3s;
+          }
+        }
+      }
+    }
+
+    .aside {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .aside-item {
+        padding: 1.5rem;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        background: #323030;
+        border: 1px solid #ffffff0d;
+        gap: 0.5rem;
+        color: #b6b6b6;
+        width: 200px;
+      }
+    }
+  }
+
+
+}
+
+.grid {
+  @include grid;
+}
+
+.error {
+  text-align: center;
+  color: #a3a3a3;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  @include secondTitle;
+}
+
+.dark-mode h2, .dark-mode h1 {
+  color: #dfdcd7 !important;
+}
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 16px;
+  max-width: 100%;
+
+
+  @include mq(sm) {
+    max-width: $col-sm;
+  }
+
+  @include mq(md) {
+    max-width: $col-md;
+  }
+
+  @include mq(lg) {
+    max-width: $col-lg;
+  }
+
+  @include mq(xl) {
+    max-width: $col-xl;
+  }
+}

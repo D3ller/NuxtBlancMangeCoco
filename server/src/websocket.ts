@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { addRoom, countAnswer, deleteCardFromDeck, deleteRoom, distributeCards, getRoomAvailable, Room, rooms, RoomStatus, setHandCard, User, UserRoles } from "./utils";
+import addRoom, { countAnswer, deleteCardFromDeck, deleteRoom, distributeCards, getRoomAvailable, Room, rooms, RoomStatus, setHandCard, User, UserRoles } from "./utils";
 import { Messages } from "./utils/message.ts";
 import bannedWords from './utils/bannedWord.json';
 import mongoose, { Mongoose } from "mongoose";
@@ -110,6 +110,14 @@ export const setupWebSockets = (server: any) => {
 
             await connectDb()
 
+            let rooms = await RoomMongoose.find({ name: roomName });
+
+            // vérification de l'existance de la room
+            callback({
+                success: false,
+                message: Messages.ROOM_ALREADY_EXIST
+            })
+
             // creation de la room dans la base de donnée
             const room = new RoomMongoose({
                 name: roomName,
@@ -170,7 +178,15 @@ export const setupWebSockets = (server: any) => {
 
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
 
+            if (!currentRoom) {
+                return
+            }
+
             const user = currentRoom.users.find(user => user.username === username);
+
+            if (!user) {
+                return
+            }
 
             if (user.username == username) {
                 cb({
@@ -241,13 +257,13 @@ export const setupWebSockets = (server: any) => {
                 wins: 0
             }
 
+            socket.join(roomName);
+            
             currentRoom.users.push(newUser);
 
-            socket.join(roomName);
-
+            await currentRoom.save();
+            
             io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
-
-            currentRoom.save();
 
             callback({
                 success: true,

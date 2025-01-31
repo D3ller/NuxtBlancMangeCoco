@@ -10,6 +10,8 @@
 
       <h2 v-if="currentPlayer.isWaiting" class="waiting">En attente des autres joueurs et du choix du leader...</h2>
 
+      <h2 v-if="waitNextTurn" class="waiting">En attente du prochain tour</h2>
+
       <div
         v-if="!currentPlayer.isWaiting && currentPlayer.cards && currentRoom.status === 'started' && currentPlayer.role != 'leader'">
         <cardSelector :cards="currentPlayer.cards" class="selector" @chooseCard="choosenCards" />
@@ -50,6 +52,8 @@ let cardPosition = ref(0)
 
 let isAnswered = ref(false);
 
+const waitNextTurn = ref(false)
+
 /**
  * This is the CurrentRoom reactive variable who manage the game.
  * If you change something in this varibale it can changing screen,
@@ -65,6 +69,7 @@ let currentRoom = reactive({
 })
 
 let currentPlayer = reactive({
+  _id: null,
   username: '',
   role: '',
   socketId: '',
@@ -84,6 +89,7 @@ onMounted(() => {
 
   socket.emit('getCurrentPlayer', username, roomName, (cb) => {
     let { user } = cb;
+    currentPlayer._id = user._id;
     currentPlayer.username = user.username;
     currentPlayer.role = user.role;
     currentPlayer.socketId = user.socketId;
@@ -110,23 +116,24 @@ socket.on('roomUpdate', (cb) => {
     }
   });
 
-  console.log('room updated')
+  // console.log('room updated')
 })
 
 socket.on('playerUpdate', (user) => {
-  console.log('user updated', user)
+  // console.log('user updated', user)
   currentPlayer.cards = user.cards
   currentPlayer.role = user.role,
     currentPlayer.wins = user.wins
 })
 
 socket.on('turn', (room) => {
-  console.log('tour suivant dans 10 sec')
+  
+  waitNextTurn.value = true
+  isAnswered.value = false
 
   setTimeout(() => {
-    console.log('turn')
 
-    isAnswered.value = false
+    waitNextTurn.value = false
 
     room.users.forEach(user => {
       if (user.username == currentPlayer.username) {
@@ -136,7 +143,7 @@ socket.on('turn', (room) => {
         currentPlayer.isWaiting = user.isWaiting
       }
     });
-  }, 1000)
+  }, 5000)
 
 })
 
@@ -180,20 +187,28 @@ useSeoMeta({
 function startGame() {
   socket.emit('startGame', roomName, (cb) => {
     if (cb.success === false) {
-      console.log(cb.message)
+      // console.log(cb.message)
     }
   })
 }
 
 const choosenCards = (index) => {
   currentPlayer.isWaiting = true;
-  socket.emit('choose-card', roomName, currentPlayer.username, currentPlayer.cards[index])
+  socket.emit('choose-card', roomName, currentPlayer, currentPlayer.cards[index])
 }
 
 function Confirm() {
   // console.log(currentRoom)
   socket.emit('confirm', roomName, cardPosition.value, (cb) => {
-    console.log(cb)
+    // console.log(cb)
+  })
+}
+
+function quitGame() {
+  socket.emit('quit', currentPlayer, currentRoom, (cb) => {
+    if (cb.success) {
+      router.push('/')
+    }
   })
 }
 

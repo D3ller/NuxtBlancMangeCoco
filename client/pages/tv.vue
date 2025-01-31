@@ -29,12 +29,16 @@ let currentRoom = reactive({
 })
 
 const qrcode = ref('')
+const showWinner = reactive({
+  status: false,
+  winner: null
+})
 
 onMounted(() => {
   const roomName = route.query.id
 
   qrcode.value = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${window.location.origin}/join?code=${currentRoom.name}`
-  
+
   socket.emit('getCurrentRoom', roomName, (cb) => {
     // initialisation de l'etat de la room
     currentRoom.name = cb.room.name;
@@ -45,12 +49,12 @@ onMounted(() => {
   })
 
   socket.emit('joinTvGroup', roomName, (cb) => {
-    console.log(cb)
+    // console.log(cb)
   })
 })
 
 socket.on('roomUpdate', (cb) => {
-  console.log('room updated')
+  // console.log('room updated')
   currentRoom.name = cb.name;
   currentRoom.status = cb.status;
   currentRoom.users = cb.users;
@@ -69,6 +73,21 @@ socket.on('updatePos', (pos) => {
 
 socket.on('kick', () => {
   router.push('/')
+})
+
+socket.on('winner', (winner) => {
+  showWinner.status = true
+  showWinner.winner = winner
+})
+
+socket.on('turn', (room) => {
+  currentRoom.answers = []
+  currentRoom.blueCard = ""
+  setTimeout(() => {
+    currentRoom.blueCard = room.blueCard
+    showWinner.status = false
+    showWinner.winner = null
+  }, 5000)
 })
 
 
@@ -96,12 +115,20 @@ let copyCode = () => {
       </nav>
 
       <NuxtImg v-if="currentRoom.status == 'waiting'" :src="qrcode" style="width: 300px; height: 300px;"></NuxtImg>
-      <h1 v-if="currentRoom.users.length >= 3 && !currentRoom.status == 'waiting'" class="start">Prêt à démarrer ?</h1>
+      <h2 v-if="currentRoom.status == 'waiting'" class="start" style="width: 80vw;">
+        Vous devez être minimum 3 joueurs. <br><br>
+        Ensuite le maître du jeu lance et vous pourrez choisir vos cartes en fonction de la plus drôle.
+      </h2>
+      <h2 v-if="currentRoom.users.length >= 3 && currentRoom.status == 'waiting'" class="start">Prêt à démarrer ?</h2>
     </div>
 
     <div v-else>
       <iframe src="https://lottie.host/embed/c63d5556-3f80-4f4b-82dd-bd2eae00444c/0tobCTdnYo.lottie"></iframe>
     </div>
+
+    <h2 v-if="showWinner.status" class="start">
+      L'utilisateur {{ showWinner.winner?.username }} à gagné le tour
+    </h2>
 
     <div style="display: flex; align-items: center; gap: 2rem;">
       <div v-if="currentRoom.blueCard" style="color:white;">

@@ -218,7 +218,7 @@ export const rooms: Room[] = [];
  * Function to create Room and save it into database
  * @param room is the room object you want to save into database
  */
-export async function addRoom(room: Room) {
+export default async function addRoom(room: Room) {
     await mongoose.connect(process.env.MONGO_URI);
     // console.log(room)
     const newRoom = new RoomMongoose({
@@ -279,8 +279,11 @@ function moveItem(array, fromIndex, toIndex) {
 }
 
 export function deleteRoom(roomName: string) {
-    let index = rooms.findIndex(e => e.name === roomName);
-    rooms.splice(index, 1);
+
+    console.log('room deleted')
+
+    // let index = rooms.findIndex(e => e.name === roomName);
+    // rooms.splice(index, 1);
 }
 
 // export async function distributeCards(currentRoom, roomName: string) {

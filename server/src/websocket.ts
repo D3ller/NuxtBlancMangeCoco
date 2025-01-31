@@ -18,69 +18,55 @@ async function connectDb() {
 
 async function distributeCards(currentRoom) {
     try {
-        // Récupérer les cartes disponibles
         let whiteCards = await WhiteCardMongoose.find();
         let blueCards = await BlueCardMongoose.find();
 
-        // Vérifier s'il y a des cartes disponibles
         if (whiteCards.length === 0 || blueCards.length === 0) {
             throw new Error('Il n\'y a pas assez de cartes disponibles pour distribuer.');
         }
 
-        // Distribuer une carte bleue à chaque utilisateur
-        for (const user of currentRoom.users) {
-            // Vérifier si les cartes bleues sont disponibles
-            if (blueCards.length === 0) {
-                throw new Error('Plus de cartes bleues disponibles.');
-            }
+        // distrib cartes blueus
+        const randomBlueIndex = Math.floor(Math.random() * blueCards.length);
+        const selectedBlueCard = blueCards[randomBlueIndex];
+        currentRoom.blueCard = selectedBlueCard;
+        blueCards.splice(randomBlueIndex, 1);
 
-            // Sélectionner une carte bleue aléatoire pour la room
-            const randomBlueIndex = Math.floor(Math.random() * blueCards.length);
-            const selectedBlueCard = blueCards[randomBlueIndex];
+        // ditrib cartes blanches
+        currentRoom.users.forEach(user => {
+            const cardsToAdd = 6 - user.cards.length;
 
-            // Retirer la carte bleue du deck
-            blueCards.splice(randomBlueIndex, 1);
-
-            // Ajouter la carte bleue à la room
-            currentRoom.blueCard = selectedBlueCard;
-
-            // Distribuer des cartes blanches aux utilisateurs
-            const cardsToAdd = 11 - user.cards.length;  // Nombre de cartes blanches à distribuer pour atteindre 11 cartes
-
-            for (let i = 0; i < cardsToAdd; i++) {
+            let addedCards = 0;
+            while (addedCards < cardsToAdd) {
                 if (whiteCards.length === 0) {
                     throw new Error('Plus de cartes blanches disponibles.');
                 }
 
-                // Sélectionner une carte blanche aléatoire
                 const randomWhiteIndex = Math.floor(Math.random() * whiteCards.length);
                 const selectedWhiteCard = whiteCards[randomWhiteIndex];
 
-                // // Retirer la carte blanche du deck
-                whiteCards.splice(randomWhiteIndex, 1);
-
-                // Ajouter la carte blanche à l'utilisateur
-                user.cards.push(selectedWhiteCard);
+                // 🔥 Vérifie NSFW avant d'ajouter
+                if (!selectedWhiteCard.nsfw) {
+                    user.cards.push(selectedWhiteCard);
+                    whiteCards.splice(randomWhiteIndex, 1);
+                    addedCards++;
+                }
             }
-        }
+        });
 
-        // Mettre à jour la room dans la base de données avec les utilisateurs et leurs cartes
-        currentRoom.users = currentRoom.users.map(user => ({
-            ...user,
-            cards: user.cards,
-        }));
-
-        // Sauvegarder la room mise à jour dans la base de données
-        // await currentRoom.save();
-
-        return await currentRoom
+        // Marquer les modifications pour Mongoose
+        currentRoom.markModified('users');
+        currentRoom.markModified('blueCard');
 
         console.log('Cartes distribuées avec succès.');
+        await currentRoom.save(); // S'assurer que la room est bien sauvegardée
+
+        return currentRoom;
     } catch (error) {
         console.error('Erreur lors de la distribution des cartes:', error);
         throw error;
     }
 }
+
 
 // function pour que si la room n'est pas occupée depuis 5min elle est reset
 // Map() sert à gerer des sortes d'etats, il peut donc comparer une ancienne variable avec une nouvelle
@@ -125,6 +111,51 @@ function resetRoomActivity(roomName, io) {
     roomActivity.set(roomName, { lastRequest: Date.now(), timer });
 }
 
+// kick un joueur inactif depuis 2min
+
+const playerActivity = new Map();
+// const PLAYER_INACTIVITY_LIMIT = 120000;
+const PLAYER_INACTIVITY_LIMIT = 10000;
+
+function resetPlayerActivity(roomName, socketId, io) {
+    const playerKey = `${roomName}:${socketId}`;
+
+    // Supprimer l'ancien timer s'il existe
+    if (playerActivity.has(playerKey)) {
+        clearTimeout(playerActivity.get(playerKey).timer);
+    }
+
+    // Créer un nouveau timer d'expulsion
+    const timer = setTimeout(async () => {
+        await connectDb();
+        let room = await RoomMongoose.findOne({ name: roomName });
+
+        if (!room) return;
+
+        // Trouver l'utilisateur dans la room
+        let userIndex = room.users.findIndex(user => user.socketId === socketId);
+
+        if (userIndex !== -1) {
+            console.log(`Expulsion du joueur inactif ${room.users[userIndex].username}`);
+
+            // Supprimer le joueur inactif de la room
+            room.users.splice(userIndex, 1);
+            await room.save();
+
+            // Informer le joueur et les autres de son expulsion
+            io.to(socketId).emit('kick')
+            io.to(roomName).emit('roomUpdate', room);
+        }
+
+        playerActivity.delete(playerKey);
+
+    }, PLAYER_INACTIVITY_LIMIT);
+
+    // Stocker le nouveau timer
+    playerActivity.set(playerKey, { lastRequest: Date.now(), timer });
+}
+
+
 export const setupWebSockets = (server: any) => {
     const io = new Server(server, {
         cors: {
@@ -154,6 +185,9 @@ export const setupWebSockets = (server: any) => {
             await connectDb()
 
             let roomExists = await RoomMongoose.findOne({ name: roomName });
+            let rooms = await RoomMongoose.find();
+
+            io.emit('rooms', rooms);
 
             resetRoomActivity(roomName, io);
 
@@ -269,7 +303,13 @@ export const setupWebSockets = (server: any) => {
         socket.on('join-server', async (roomName, username, callback) => {
             await connectDb()
 
+            resetRoomActivity(roomName, io)
+            resetPlayerActivity(roomName, socket.id, io)
+
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
+            let rooms = await RoomMongoose.find();
+
+            io.emit('rooms', rooms);
 
             if (!currentRoom) {
                 return callback({
@@ -368,8 +408,11 @@ export const setupWebSockets = (server: any) => {
 
         socket.on('startGame', async (roomName, callback) => {
             await connectDb()
+            resetPlayerActivity(roomName, socket.id, io)
 
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
+
+            socket.emit('rooms', currentRoom);
 
             if (!currentRoom) {
                 return
@@ -394,12 +437,17 @@ export const setupWebSockets = (server: any) => {
 
             // await currentRoom.isModified()
 
+            if (!currentRoom) {
+                return
+            }
+
             await currentRoom.save()
 
         })
 
-        socket.on('choose-card', async (roomName, username, cardChoosed) => {
+        socket.on('choose-card', async (roomName, room, cardChoosed) => {
             await connectDb()
+            resetPlayerActivity(roomName, socket.id, io)
 
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
 
@@ -407,11 +455,20 @@ export const setupWebSockets = (server: any) => {
                 return
             }
 
-            const user = currentRoom.users.find(user => user.username === username);
+            const user = currentRoom.users.find(user => user.username === room.username);
 
             if (!user) {
                 return
             }
+
+            const cardIndex = user.cards.findIndex(card => card._id.toString() === cardChoosed._id.toString());
+
+            if (cardIndex === -1) {
+                console.error("Carte non trouvée dans le deck du joueur !");
+                return;
+            }
+
+            const [removedCard] = user.cards.splice(cardIndex, 1);
 
             let inCardUser = {
                 id: user._id,
@@ -437,6 +494,7 @@ export const setupWebSockets = (server: any) => {
 
         socket.on('confirm', async (roomName, cardPos, cb) => {
             await connectDb()
+            resetPlayerActivity(roomName, socket.id, io)
 
             let currentRoom = await RoomMongoose.findOne({ name: roomName });
 
@@ -463,7 +521,7 @@ export const setupWebSockets = (server: any) => {
                 user.role = UserRoles.USER
             })
 
-            currentRoom.blueCard = ''
+            currentRoom.blueCard = null
             currentRoom.answers = []
 
             // Incrémentation des victoires
@@ -483,13 +541,66 @@ export const setupWebSockets = (server: any) => {
             })
 
             // io.to(`TV_${roomName}`).to(roomName).emit('roomUpdate', currentRoom)
-            io.to(roomName).emit('turn', currentRoom)
+            io.to(`TV_${roomName}`).emit('winner', winner)
+            io.to(`TV_${roomName}`).to(roomName).emit('turn', currentRoom)
         })
 
-        // fonction pour quitter le jeu proprement
-        socket.on('quit', () => {
+        socket.on('quit', async (user, room, cb) => {
+            await connectDb();
 
-        })
+            let currentRoom = await RoomMongoose.findOne({ name: room.name });
+            if (!currentRoom) return;
+
+            // Trouver l'utilisateur dans la room actuelle
+            let currentUser = currentRoom.users.find(u => u.username === user.username);
+            if (!currentUser) return;
+
+            let rooms = await RoomMongoose.find();
+
+            io.emit('rooms', rooms);
+
+            // Supprime le joueur de la liste des utilisateurs
+            currentRoom.users = currentRoom.users.filter(u => u.username !== user.username);
+
+            // Si le leader quitte, attribuer un nouveau leader
+            if (user.role === "leader" && currentRoom.users.length > 0) {
+                currentRoom.users[0].role = "leader";
+                console.log(`New leader assigned: ${currentRoom.users[0].username}`);
+
+                currentRoom.answers = [];
+                // currentRoom.answers = currentRoom.answers.filter(answer =>
+                //     answer.id.toString() !== currentRoom.users[0]._id.toString()
+                // );
+            }
+
+            // Supprimer la réponse de l'ancien joueur
+            currentRoom.answers = currentRoom.answers.filter(answer =>
+                answer.id.toString() !== currentUser._id.toString()
+            );
+
+            // Si moins de 3 joueurs, mettre la salle en attente et vider les réponses
+            if (currentRoom.users.length < 3) {
+                currentRoom.status = 'waiting';
+                currentRoom.answers = [];
+            }
+
+            console.log(currentRoom);
+
+            // Sauvegarder les changements
+            await currentRoom.save();
+
+            // Mettre à jour la room pour tous les joueurs connectés
+            // io.to(room.name).emit('playerUpdate', currentUser);
+            io.to(room.name).emit('turn', currentRoom);
+            io.to(`TV_${room.name}`).to(room.name).emit('roomUpdate', currentRoom);
+
+            console.log(`User ${user.username} left the room ${currentRoom.name}`);
+
+            cb({
+                success: true,
+                message: 'USER HAS BEEN REMOVED'
+            });
+        });
 
     });
 

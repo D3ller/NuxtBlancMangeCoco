@@ -8,9 +8,19 @@
       <h2 class="title" id="description">Les actus du projet</h2>
       <div class="news-cards">
         <div class="news-card">
-          <h3>Phase de BETA</h3>
-          <p>Le jeu est techniquement jouable, mais pas terminé, il faut encore peaufiner le système de tour par tour ainsi que le système de rechargement de page pour que ce dernier ne fasse pas quitter la partie en cours en cas de problèmes de connexion.De plus, il reste quelques bugs à corrigés.</p> 
-          <p class="date">Publié le 20/01/2025</p>
+          <h3>Correctif de bugs</h3>
+          <p>Mise en place de flèches pour mieux voir pouvoir changer les cartes, et correction scss du QR code qui était impossible à scanner. </p> 
+          <p class="date">Publié le 01/02/2025</p>
+        </div>
+        <div class="news-card">
+          <h3>Le jeu est enfin disponible sur la télé de l'IUT</h3>
+          <p>Le jeu est enfin jouable par tous les étudiants de l'IUT, il vous suffit simplement de scanner le QR code et de rejoindre la salle "IUT2TROYES" pour jouer avec vos amis. </p> 
+          <p class="date">Publié le 31/01/2025</p>
+        </div>
+        <div class="news-card">
+          <h3>Le jeu sera bientôt disponible sur la télévision du département MMI</h3>
+          <p>Bonne nouvelle, le jeu sera disponibles dès la semaine du 27 janvier 2025. Nous sommes impatients de vous le présenter. </p> 
+          <p class="date">Publié le 24/01/2025</p>
         </div>
         <div class="news-card">
           <h3>Ajout de nouvelle cartes</h3>

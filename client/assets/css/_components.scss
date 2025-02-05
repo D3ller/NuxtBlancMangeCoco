@@ -1,0 +1,21 @@
+@import "mixins";
+
+.button {
+  @include button;
+}
+
+.game-cards {
+  @include gameCard;
+}
+
+.about_card {
+  @include aboutCard;
+}
+
+.faq-item {
+  @include faqCard;
+}
+
+.roomCard {
+  @include RoomCard;
+}

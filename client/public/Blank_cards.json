@@ -1,0 +1,404 @@
+{
+  "cards": [
+    {
+      "type": "1_blank",
+      "text": "La meilleure idée que j’ai eue après 2 verres de vin, c’était __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Mon pire cauchemar, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le secret pour un mariage heureux, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce qui me fait rire à chaque fois, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "À ma soirée d'anniversaire, il y aura forcément __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "La seule chose qui peut sauver cette planète, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je ferais si j’étais le maître du monde pendant une journée, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Mon plus grand rêve quand j’étais enfant, c’était __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le rituel secret de ma famille, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je pouvais être n’importe qui pendant 24h, je serais __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "La pire chose que tu puisses dire à ton patron, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Mon superpouvoir inutile serait __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "La seule chose qui peut me rendre heureux, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce qui m’a fait pleurer la dernière fois, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Pour gagner un concours de talents, je présenterais __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je ne dirai jamais à haute voix, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je devais faire une apparition dans un film, je jouerais __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je regrette le plus d'avoir dit à ma mère, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "La meilleure excuse pour ne pas aller travailler, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que j’aimerais vraiment entendre à mon enterrement, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que j’ai découvert dans mon placard, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je crierais du haut de la Tour Eiffel, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "L’endroit où j’irais si je voulais disparaître, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je fais toujours en secret, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le pire conseil qu’on m’ait jamais donné, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je ne peux pas m’empêcher de faire quand je suis seul, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le premier mot que j’ai appris en grandissant, c’était __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je pouvais changer une loi, j’interdirais __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Mon pire moment au lycée, c’était à cause de __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je n'oublierai jamais de mes vacances, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce qui me pousse à mentir, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je devais être un animal, je serais __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je mange toujours en cachette, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ma plus grande fierté secrète, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que j’écrirais sur ma pierre tombale, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce qui a ruiné ma dernière relation amoureuse, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je pouvais éliminer une seule chose de ce monde, ce serait __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je fais quand je suis complètement ivre, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce qui me fait perdre tout espoir en l’humanité, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je regrette le plus après une soirée trop arrosée, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le mot que je déteste entendre, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le plus grand échec de ma vie, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je voudrais dire à mes futurs enfants, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "La chose la plus ridicule que j’ai faite pour de l'argent, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que j’écrirais sur un panneau publicitaire si j'en avais l'occasion, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le truc le plus bizarre que j'ai découvert dans ma boîte aux lettres, c'est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce qui m’a fait réaliser que j’étais vraiment adulte, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je dirais à mon moi de 10 ans, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Le plat que je ne pourrais jamais manger, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je garde toujours dans ma poche, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "La meilleure insulte que j’ai jamais entendue, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je devais changer de prénom, je choisirais __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je ferais si je devais rester enfermé chez moi pour toujours, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que je crains plus que tout, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce qui me fait me lever le matin, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "La chose la plus bizarre que j’ai vue en 2023, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que j’aimerais découvrir au fond de l’océan, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je pouvais effacer une personne de mon passé, ce serait __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Ce que j’ai oublié de dire lors de mon dernier rendez-vous, c’est __________."
+    },
+    {
+      "type": "1_blank",
+      "text": "Si je devais choisir une seule nourriture pour le reste de ma vie, ce serait __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "J’ai essayé __________ et j’ai fini par __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Si je pouvais avoir __________ pour le petit déjeuner et __________ pour le dîner, je serais au paradis."
+    },
+    {
+      "type": "2_blanks",
+      "text": "La vie serait beaucoup plus facile si on avait __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Mon plan de vie idéal, c’est __________ le matin et __________ le soir."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Pour une soirée parfaite, il suffit d’avoir __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Le secret pour réussir dans la vie, c’est __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Avec __________ dans une main et __________ dans l’autre, je suis prêt à tout affronter."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Pour impressionner quelqu’un, je ferais __________ puis __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Si je pouvais échanger __________ contre __________, je serais vraiment heureux."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Je me sentirais invincible avec __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Mon dernier rêve étrange impliquait __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "La pire façon de gâcher une fête, c’est avec __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Quand je me suis réveillé ce matin, j’ai trouvé __________ dans mon lit et __________ sous mon lit."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Ma pire soirée se résume à __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Mon meilleur ami et moi, on a survécu à __________ et à __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Si je devais choisir entre __________ et __________, je choisirais toujours la troisième option."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Le film que j’écrirais parlerait de __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Ma recette préférée commence avec __________ et se termine avec __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Ce que je veux absolument pour Noël, c’est __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Dans 10 ans, je me vois avec __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Mon futur titre de livre sera : \"L’histoire de __________ et __________.\""
+    },
+    {
+      "type": "2_blanks",
+      "text": "En 2040, tout le monde aura __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Le meilleur duo au monde, c’est __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Si je pouvais transformer n’importe qui en __________, je choisirais __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Pour survivre à l’apocalypse, il te faudra __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "La prochaine grande invention sera __________ combiné à __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Ce que j’emporterais toujours en voyage : __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Le truc que je n’oublierai jamais à un mariage, c’est __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "La première chose que je fais le matin : __________ et __________."
+    },
+    {
+      "type": "2_blanks",
+      "text": "Dans mes rêves les plus fous, il y a __________ et __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Pour être heureux, il te faut __________, __________ et beaucoup de __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Mon cocktail idéal contient __________, __________ et une touche de __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Pour un mariage réussi, il faut __________, __________ et absolument pas de __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Une fête n’est pas complète sans __________, __________ et surtout __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Le pire scénario apocalyptique inclut __________, __________ et __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Si je pouvais créer un monde parfait, il y aurait __________, __________ et __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Pour vraiment vivre l’aventure de ma vie, il me faudrait __________, __________ et aussi __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Le meilleur plan pour un week-end parfait : __________, __________ et un peu de __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Mon prochain projet fou impliquera __________, __________ et surtout beaucoup de __________."
+    },
+    {
+      "type": "3_blanks",
+      "text": "Si je devais choisir trois choses pour le reste de ma vie, ce serait __________, __________ et bien sûr __________."
+    }
+  ]
+}

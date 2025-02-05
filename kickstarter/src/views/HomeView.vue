@@ -102,10 +102,12 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
       <p>Phase dans laquelle nous avons trouvé l'idée du jeu, définis les règles de jeu et le design de ce dernier et que nous avons définis les tâches et rôles de chacun.</p>
       <h3>Landing Page (Septembre-Octobre)</h3>
       <p>Design et prototypage de la landing page qui va être utiliser pour lancer le jeu depuis une télévision et un QR code.</p>
-      <h3>Développement du jeu  (Octobre-à déterminé)</h3>
+      <h3>Développement du jeu  (Octobre-Novembre)</h3>
       <p>Création du jeu en lui-même, avec les différentes fonctionnalités que nous avons définis dans la note de cadrage.</p>
-      <h3>Tests et corrections (à déterminé)</h3>
-      <h3>Déploiement du jeu (à déterminé)</h3>
+      <h3>Tests et corrections (Décembre-Janvier)</h3>
+      <p>Tests du jeu et corrections des bugs et des problèmes de gameplay.</p>
+      <h3>Déploiement du jeu (Janvier-Février)</h3>
+      <p> Mise en ligne du jeu sur les télévisions de l'IUT et du département MMI.</p>
       <h2 class="title" id="etat">Etat de l'art du domaine</h2>
       <p>
         Pour le moment, nous savons que pour ce type nous avons besoin de deux types de cartes, les « cartes phrases à trous » et les cartes « bout de phrases », ces dernières permettent de compléter les cartes phrases à trous.
@@ -114,15 +116,10 @@ import HeaderLinks from "@/components/HeaderLinks.vue";
         Pour Banana Split, nous allons partir sur des règles similaires à Blanc Manger Coco, un Question Master est choisi de façon aléatoire et il pourra donner son rôle lorsqu’il aura voté pour sa carte préférée.
       </p>
       <h2 class="title" id="avance">Avancée du projet</h2>
-      <p>Semaine 1: <br>
-        Nous avons donc décidé de commencer par définir le design de notre site, notamment le logo et les différentes couleurs que nous allions utiliser. Ensuite, nous avons commencé à créer une maquette des différentes pages que nous avions imaginées, telles que la page d'accueil, la barre de navigation, le pied de page, ainsi que la version mobile. Pendant ce temps, Corentin et Emilien ont commencé à faire des tests avec Socket.io et à explorer comment adapter notre jeu pour les téléphones. Nous avons aussi commencer à organiser comment allions mettre nos données.
-        <br> <br>
-        Semaine 2:<br>
-        Cette semaine, nous avons réparti les tâches comme suit : Corentin s'est occupé de la création et de la configuration de différentes  pages, tandis qu'Émilien a pris en charge la configuration de Socket.io et des requêtes associées. Axel a travaillé sur l'alimentation de notre base de données à l'aide du jeu, ainsi que sur la création de questions. Quant à Richard, il s'est chargé de la création des formulaires de connexion et d'inscription, ainsi que de la mise à jour du projet Kickstarter.
-        <br> <br>
-        Semaine 3:<br>
-        Le développement à continuer sans rencontrer de problèmes, la connexion et l'inscription ont été commencées, ces fonctionnalités seront finies d'ici fin Novembre.
-      </p>
+        <p>
+          Le jeu est terminé, vous pouvez dès à présent y jouer en scannant le QR code présent sur les télévisions de l'IUT et du département MMI ou en utilisant ce lien. 
+          <a href="https://jeux.cnelhomme.xyz" target="_blank">https://jeux.cnelhomme.xyz</a>.
+        </p>
     </changelog>
   </div>
 </template>
